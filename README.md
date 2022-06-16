@@ -9,16 +9,13 @@
     $ rails db:create && rails db:migrate
     $ rails s
 # カタログ設計
-https://docs.google.com/spreadsheets/d/1LXGPALHgtO5AsFpGhZqvteM7tUVq_3hKYmIOLQhmniU/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1OrF_CgroH5cLxbI4i1YB5oZmLRnNrcF2boC-2PO153Q/edit?usp=sharing
 # テーブル定義書
-https://docs.google.com/spreadsheets/d/1LXGPALHgtO5AsFpGhZqvteM7tUVq_3hKYmIOLQhmniU/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1OrF_CgroH5cLxbI4i1YB5oZmLRnNrcF2boC-2PO153Q/edit?usp=sharing
 # ワイヤーフレーム
-https://docs.google.com/spreadsheets/d/1LXGPALHgtO5AsFpGhZqvteM7tUVq_3hKYmIOLQhmniU/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1OrF_CgroH5cLxbI4i1YB5oZmLRnNrcF2boC-2PO153Q/edit?usp=sharing
 # ER図
 ![ER図](./DotLibrary_ER.png)
-
-# 画面遷移図(一般ユーザ)
-![画面遷移図](./DotLibrary_ScrTra.png)
 
 # 画面遷移図(司書ユーザ)
 ![画面遷移図](./DotLibrary_ScrTra_library.png)
