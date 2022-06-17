@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyText
+  person: one
+  order_person_name: MyString
+  receive_person_id: 
+  receive_person_name: MyString
+  number: 1
+  complete_flg: false
+  rimit: MyText
+  condition: MyText
+  price: 1
+
+two:
+  title: MyText
+  person: two
+  order_person_name: MyString
+  receive_person_id: 
+  receive_person_name: MyString
+  number: 1
+  complete_flg: false
+  rimit: MyText
+  condition: MyText
+  price: 1

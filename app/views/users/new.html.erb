@@ -1,0 +1,85 @@
+<h2 style="margin: 20px;">アカウント登録</h2>
+<div class="user_box">
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: @user, local: true) do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :個人番号： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :number, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <%= f.label :パスワード： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.password_field :password, :placeholder => "半角英数字6文字以上" %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.password_field :password_confirmation, :placeholder => "確認のため再入力" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :登録相手： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.select(:authority, ["書店", "個人提供者"]) %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :権限： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.label :admin, "管理者：", {value: :true, style: "display: inline-block;"} %>
+      <%= f.radio_button :admin, :false %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.label :admin, "一般：", {value: :false, style: "display: inline-block;" }%>
+      <%= f.radio_button :admin, :true, checked: true %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <%= f.label :メールアドレス： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.email_field :email, :size => 32 %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <%= f.label :テンプレート： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.select :templete, templeteA %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <%= f.label :所属グループ： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.select :group, groupA %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <h4 style="margin-top: 30px;"><%= f.submit "登録", class: "btn btn-primary"  %></h4>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <h4 style="margin-top: 30px;"><%= link_to t('common.back'), jobs_manage_path %></h4>
+    </div>
+  </div>
+<% end %>
+</div>
+

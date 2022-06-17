@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  provider: one
+  book: one
+  quantity: 1
+  hand_flg: false
+
+two:
+  provider: two
+  book: two
+  quantity: 1
+  hand_flg: false

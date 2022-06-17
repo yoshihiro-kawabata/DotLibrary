@@ -1,0 +1,83 @@
+ja:
+  activerecord:
+    models:
+      authority: 権限
+      book: 本
+      books_provider: 提供者の本
+      books_store: 書店の本
+      comment: コメント
+      detail: 詳細
+      library: 図書館
+      message: メッセージ
+      order: 受発注
+      user: ユーザ
+      users_authority: ユーザの権限
+      provider: 提供者
+      store: 書店
+    attributes:
+      authority: 
+        title: タイトル
+      book: 
+        title: タイトル
+      books_provider: 
+        title: タイトル
+      books_store: 
+        title: タイトル
+      comment: 
+        title: タイトル
+      detail: 
+        title: タイトル
+      library:
+        number: 個人番号
+        name: 名前
+        email: メールアドレス
+      message: 
+        title: タイトル
+      provider: 
+        number: 個人番号
+        name: 名前
+        email: メールアドレス
+      store: 
+        number: 個人番号
+        name: 名前
+        email: メールアドレス
+      order: 
+        title: タイトル
+      user:
+        number: 個人番号
+        name: 名前
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+      users_authority: 
+        title: タイトル
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      blank: を入力してください
+      too_short: は6文字以上で入力してください
+      invalid: は正しくありません
+      taken: はすでに使用されています
+      confirmation: とパスワードの入力が一致しません
+  helpers:
+    submit:
+      create: 登録する
+      update: 更新する
+  common:
+    new: 新規作成
+    show: 詳細
+    edit: 編集
+    destroy: 削除
+    back: 戻る
+    confirm_destroy: 本当に削除してもよろしいですか？
+  users:
+    new:
+      title: アカウント登録ページ
+    edit:
+      title: アカウント編集ページ
+    show:
+      title: アカウント詳細ページ
+    create:
+      created: アカウントを登録しました
+    update:
+      updated: アカウントを更新しました

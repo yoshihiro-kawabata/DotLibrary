@@ -1,0 +1,12 @@
+<div class="new_box">
+<h2 style="margin: 20px;">ログイン</h2>
+<%= form_with(scope: :session, url: sessions_path, local: true) do |f| %>
+  <%= f.label :個人番号 %><br>
+  <%= f.text_field :number %><br>
+  <%= f.label :利用番号 %><br>
+  <%= f.text_field :sub_number %><br>
+  <%= f.label :パスワード %><br>
+  <%= f.password_field :password %><br>
+  <%= f.submit "ログイン", class: "btn btn-primary"  %>
+<% end %>
+</div>
