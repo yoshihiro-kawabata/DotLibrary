@@ -1,0 +1,107 @@
+<h2 style="margin: 20px;">書籍詳細</h2>
+<div class="book_box">
+
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-6">
+      <div class="d-flex flex-wrap">
+        <div class="col-sm-12 col-lg-4">
+            書籍名：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @book.name %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            キーワード：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+        <%= @book.keyword1 if @book.keyword1.present? %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+        </div>
+        <div class="col-sm-12 col-lg-8">
+        <%= @book.keyword2 if @book.keyword2.present? %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+        </div>
+        <div class="col-sm-12 col-lg-8">
+        <%= @book.keyword3 if @book.keyword3.present? %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+        </div>
+        <div class="col-sm-12 col-lg-8">
+        <%= @book.keyword4 if @book.keyword4.present? %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+        </div>
+        <div class="col-sm-12 col-lg-8">
+        <%= @book.keyword5 if @book.keyword5.present? %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            登録者：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @user.name %>
+        </div>
+
+      <% if @user_flg == true %>
+        <div class="col-sm-12 col-lg-4">
+            在庫数：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @sub_book.quantity %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            値段：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @sub_book.price %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            納期：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @sub_book.limit %>
+        </div>
+      <% else %>
+        <div class="col-sm-12 col-lg-4">
+            在庫数：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @sub_book.quantity %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            譲渡貸借：
+        </div>
+        <% if @sub_book.hand_flg? %>
+            <div class="col-sm-12 col-lg-8">
+                譲渡可能
+            </div>
+        <% else %>
+            <div class="col-sm-12 col-lg-8">
+                貸借のみ
+            </div>
+        <% end %>
+      <% end %>
+      <div class="col-sm-12 col-lg-4">
+        <h4><% unless @c_job.authority_id == 1 %><%= link_to t('common.edit'), edit_book_path(@book.id) %><% end %></h4>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <h4><%= link_to t('common.back'), books_path %></h4>
+      </div>
+    </div>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+      <div class="d-flex flex-wrap">
+        <% if @book.images.attached? %>
+            <% @book.images.each do |image| %>
+                <div class="col-sm-12 col-lg-5">
+                    <%= image_tag image.variant(resize_to_limit: [250, 250]) %>
+                </div>
+                <div class="col-sm-12 col-lg-1">
+                </div>
+            <% end %>
+        <% end %>
+      </div>
+    </div>
+   </div>
+</div>

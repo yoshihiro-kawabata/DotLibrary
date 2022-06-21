@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
   <head>
     <title>DotLibrary</title>
     <%= csrf_meta_tags %>
@@ -7,9 +6,89 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
   </head>
 
-  <body>
-    <%= yield %>
+  <body>  
+  <nav>
+  <% if logged_in? %>
+  <ul>
+  <li><%= link_to "DotLibrary", mypage_users_path %></li>
+
+  <% case @c_job.authority_id %>
+    <% when 1 then %>
+
+  <li class="has-child"><%= link_to "在庫を探す", books_path %></li>
+  <li class="has-child"><a>受発注管理</a>
+    <ul>
+    <li class="has-child"><%= link_to "受発注状況", orders_path %></li>
+    <li class="has-child"><%= link_to "受発注履歴", orders_path %></li>
+    <li class="has-child"><%= link_to "受発注データ作成", new_order_path %></li>
+    </ul>
+  </li>
+  <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
+  <li class="has-child"><a>アカウント</a>
+    <ul>
+    <li><%= link_to "マイページ", mypage_users_path %></li>
+    <li><%= link_to "登録者確認", users_path %></li>
+    <li><%= link_to "アカウント登録", new_user_path %></li>
+    <li><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
+    <li><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
+    </ul>
+  </li>
+    <% when 2 then %>
+
+  <li class="has-child"><a>書籍一覧</a>
+    <ul>
+    <li class="has-child"><%= link_to "在庫を探す", books_path %></li>
+    <li class="has-child"><%= link_to "書籍登録", new_book_path %></li>
+    </ul>
+  <li class="has-child"><a>受発注管理</a>
+    <ul>
+    <li class="has-child"><%= link_to "受発注状況", orders_path %></li>
+    <li class="has-child"><%= link_to "受発注履歴", orders_path %></li>
+    </ul>
+  </li>
+  <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
+  <li class="has-child"><a>アカウント</a>
+    <ul>
+    <li><%= link_to "マイページ", mypage_users_path %></li>
+    <li><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
+    <li><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
+    </ul>
+  </li>
+
+
+    <% when 3 then %>
+
+
+  <li class="has-child"><a>書籍一覧</a>
+    <ul>
+    <li class="has-child"><%= link_to "在庫を探す", books_path %></li>
+    <li class="has-child"><%= link_to "書籍登録", new_book_path %></li>
+    </ul>
+  <li class="has-child"><a>受発注管理</a>
+    <ul>
+    <li class="has-child"><%= link_to "受発注状況", orders_path %></li>
+    <li class="has-child"><%= link_to "受発注履歴", orders_path %></li>
+    </ul>
+  </li>
+  <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
+  <li class="has-child"><a>アカウント</a>
+    <ul>
+    <li><%= link_to "マイページ", mypage_users_path %></li>
+    <li><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
+    <li><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
+    </ul>
+  </li>
+  <% end %>
+
+  <% end %>
+  </ul>
+  </nav>
+  <% flash.each do |key, value| %>
+    <%= content_tag(:div, value, class: "#{key}") %>
+  <% end %>
+  <%= yield %>
   </body>
 </html>

@@ -5,7 +5,7 @@ class CreateBooksStores < ActiveRecord::Migration[6.0]
       t.references :book, null: false, foreign_key: true
       t.integer :quantity, null: false
       t.integer :price, null: false
-      t.text :rimit, null: false
+      t.text :limit, null: false
 
       t.timestamps
     end

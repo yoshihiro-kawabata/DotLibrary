@@ -25,14 +25,27 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
 
+gem 'cloudinary', require: true        
+gem 'activestorage-cloudinary-service' 
+gem 'active_storage_validations'
+
+
 gem 'rails-i18n'
 
 gem 'aws-sdk-s3', require: false
 
 gem 'dotenv-rails'
 
+gem 'kaminari'
+
+gem 'ransack'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+gem 'bootstrap', '~> 4.4.1'
+gem 'jquery-rails'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -1,0 +1,136 @@
+<h2 style="margin: 20px;">書籍編集</h2>
+<div class="book_box">
+<% if @book.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @book.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @sub_book.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @sub_book.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: @book, local: true) do |f| %>
+<div class="d-flex flex-wrap">
+  <div class="col-sm-12 col-lg-6">
+    <div class="d-flex flex-wrap">
+      <div class="col-sm-12 col-lg-4">
+        <%= f.label :書籍名： %>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :name, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+        <%= f.label :書籍番号： %>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :number, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+        <%= f.label :キーワード： %>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword1, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword2, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword3, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword4, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword5, :size => 32, :placeholder => "30文字以内" %>
+      </div>
+      <% case @c_job.authority_id when 2 then %>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :在庫数： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.text_field :quantity, :size => 32,:value => @sub_book.quantity, :placeholder => "30文字以内" %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :値段： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.text_field :price, :size => 32,:value => @sub_book.price, :placeholder => "30文字以内" %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :納期： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.text_field :limit, :size => 32,:value => @sub_book.limit, :placeholder => "30文字以内" %>
+        </div>
+      <% when 3 then %>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :在庫数： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.text_field :quantity, :size => 32,:value => @sub_book.quantity, :placeholder => "30文字以内" %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :譲渡貸借： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.select(:hand_flg, ["譲渡可能", "貸借のみ"]) %>
+        </div>
+      <% end %>
+      <div class="col-sm-12 col-lg-4">
+        <%= f.label :追加する画像： %>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <%= f.file_field :images, accept: 'image/jpg, image/jpeg, image/png, image/gif', multiple: true %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+        <h4 style="margin-top: 30px;"><%= f.submit "編集", class: "btn btn-primary"  %></h4>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <h4 style="margin-top: 30px;"><%= link_to t('common.back'), book_path(@book.id) %></h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-6">
+    <div class="d-flex flex-wrap">
+      <div class="col-sm-12 col-lg-12">
+        <%= f.label :現在使用している画像： %>
+      </div>
+      <div class="col-sm-12 col-lg-12">
+        <div class="d-flex flex-wrap">
+          <% if @book.images.attached? %>
+            <% @book.images.each do |image| %>
+                <div class="col-sm-12 col-lg-5">
+                    <%= image_tag image.variant(resize_to_limit: [250, 250]) %><br>
+                    <%= f.check_box :image_ids, { multiple: true }, image.id, false %>
+                    👆この画像を削除する
+                </div>
+                <div class="col-sm-12 col-lg-1">
+                </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+</div>

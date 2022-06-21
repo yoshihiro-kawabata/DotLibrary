@@ -9,9 +9,32 @@
     </ul>
   </div>
 <% end %>
+<% if @sub_user.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @sub_user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
 
 <%= form_with(model: @user, local: true) do |f| %>
   <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :登録相手： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.select(:authority, ["書店", "個人提供者"]) %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :名前： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :name, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
     <div class="col-sm-12 col-lg-4">
         <%= f.label :個人番号： %>
     </div>
@@ -32,24 +55,31 @@
     </div>
 
     <div class="col-sm-12 col-lg-4">
-        <%= f.label :登録相手： %>
+        <%= f.label :利用番号： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.select(:authority, ["書店", "個人提供者"]) %>
+        <%= f.text_field :sub_number, :size => 32, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
-        <%= f.label :権限： %>
+        <%= f.label :電話番号： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.label :admin, "管理者：", {value: :true, style: "display: inline-block;"} %>
-      <%= f.radio_button :admin, :false %>
+        <%= f.text_field :phone, :size => 32, :placeholder => "30文字以内" %>
     </div>
+
     <div class="col-sm-12 col-lg-4">
+        <%= f.label :FAX： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.label :admin, "一般：", {value: :false, style: "display: inline-block;" }%>
-      <%= f.radio_button :admin, :true, checked: true %>
+        <%= f.text_field :fax, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :担当者： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :manager, :size => 32, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
@@ -60,24 +90,17 @@
     </div>
 
     <div class="col-sm-12 col-lg-4">
-      <%= f.label :テンプレート： %>
+        <%= f.label :住所： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.select :templete, templeteA %>
-    </div>
-
-    <div class="col-sm-12 col-lg-4">
-      <%= f.label :所属グループ： %>
-    </div>
-    <div class="col-sm-12 col-lg-8">
-      <%= f.select :group, groupA %>
+      <%= f.text_area :address, maxlength: "200" ,class: "form-control",id: "exampleFormControlTextarea1", style: "height:100px; wrap:hard;" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
       <h4 style="margin-top: 30px;"><%= f.submit "登録", class: "btn btn-primary"  %></h4>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <h4 style="margin-top: 30px;"><%= link_to t('common.back'), jobs_manage_path %></h4>
+      <h4 style="margin-top: 30px;"><%= link_to t('common.back'), mypage_users_path %></h4>
     </div>
   </div>
 <% end %>

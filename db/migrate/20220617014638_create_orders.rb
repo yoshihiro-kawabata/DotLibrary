@@ -8,7 +8,7 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.string :receive_user_name, null: false
       t.integer :number, null: false
       t.boolean :complete_flg, null: false, default: false
-      t.text :rimit
+      t.text :limit
       t.text :condition
       t.integer :price
 

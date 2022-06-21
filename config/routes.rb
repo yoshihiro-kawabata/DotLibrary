@@ -2,9 +2,27 @@ Rails.application.routes.draw do
   root 'sessions#new'
 
   resources :sessions, only: [:new, :create, :destroy]
-  resources :books
-  resources :meesages
   resources :orders
-  resources :users
+
+  resources :books do
+    collection do
+      get 'search'
+    end
+  end
+
+
+  resources :users do
+    collection do
+      get 'mypage'
+    end
+  end
+
+  resources :messages do
+    collection do
+      get 'alldel'
+      get 'allshow'
+    end
+  end
+
 
 end

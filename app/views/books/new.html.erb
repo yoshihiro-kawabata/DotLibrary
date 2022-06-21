@@ -1,0 +1,117 @@
+<h2 style="margin: 20px;">書籍登録</h2>
+<div class="book_box">
+<% if @book.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @book.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @sub_book.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @sub_book.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: @book, local: true) do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :書籍名： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.text_field :name, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :書籍番号： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.text_field :number, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :キーワード： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword1, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword2, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword3, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword4, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :keyword5, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <% case @c_job.authority_id when 2 then %>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :在庫数： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :quantity, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :値段： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :price, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :納期： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :limit, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <% when 3 then %>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :在庫数： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :quantity, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :譲渡貸借： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.select(:hand_flg, ["譲渡可能", "貸借のみ"]) %>
+    </div>
+    <% end %>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :画像： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.file_field :images, accept: 'image/jpg, image/jpeg, image/png, image/gif', multiple: true %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <h4 style="margin-top: 30px;"><%= f.submit "登録", class: "btn btn-primary"  %></h4>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <h4 style="margin-top: 30px;"><%= link_to t('common.back'), mypage_users_path %></h4>
+    </div>
+  </div>
+<% end %>
+</div>

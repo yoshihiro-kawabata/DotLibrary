@@ -1,22 +1,21 @@
-ユーザを選択してください。
-
-<table style="width:1200px; border:3px solid">
+<h2 style="margin: 20px;">アカウント一覧</h2>
+<div class="example">
+<table style="width:1000px; border:3px solid">
   <thead>
     <tr>
       <th style="width:300px;">名前</th>
-      <th style="width:600px;">メールアドレス</th>
+      <th style="width:400px;">住所</th>
       <th style="width:300px;">選択</th>
     </tr>
   </thead>
-
   <tbody>
-    <% @users.each do |user| %>
+    <% @sub_users.size.times do |n| %>
       <tr>
-        <td style="border:2px solid"><%= user.name %></td>
-        <td style="border:2px solid"><%= user.email %></td>
-        <td style="border:2px solid"><%= link_to '確認', jobs_data_path %></td>
+        <td style="border:2px solid"><%= @sub_users[n][0] %></td>
+        <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 400px; "><%= @sub_users[n][1] %></td>
+        <td style="border:2px solid"><%= link_to '確認', user_path(@sub_users[n][2]) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<#%= paginate @users %>
+</div>

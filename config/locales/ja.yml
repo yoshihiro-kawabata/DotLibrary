@@ -18,29 +18,47 @@ ja:
       authority: 
         title: タイトル
       book: 
-        title: タイトル
+        name: 書籍名
+        number: 書籍番号
+        images: 画像
+        add_images: 追加する画像
+        del_images: 削除する画像
       books_provider: 
         title: タイトル
+        quantity: 在庫数
+        hand_flg: 譲渡貸借
+        book: 書籍
       books_store: 
         title: タイトル
+        quantity: 在庫数
+        price: 値段
+        book: 書籍
       comment: 
         title: タイトル
       detail: 
         title: タイトル
       library:
-        number: 個人番号
+        sub_number: 利用番号
         name: 名前
         email: メールアドレス
+        phone: 電話番号
+        address: 住所
       message: 
         title: タイトル
       provider: 
-        number: 個人番号
+        sub_number: 利用番号
         name: 名前
         email: メールアドレス
+        phone: 電話番号
+        address: 住所
       store: 
-        number: 個人番号
+        sub_number: 利用番号
         name: 名前
         email: メールアドレス
+        phone: 電話番号
+        fax: FAX
+        manager: 担当者
+        address: 住所
       order: 
         title: タイトル
       user:
@@ -56,7 +74,7 @@ ja:
     messages:
       blank: を入力してください
       too_short: は6文字以上で入力してください
-      invalid: は正しくありません
+      invalid: が正しくありません
       taken: はすでに使用されています
       confirmation: とパスワードの入力が一致しません
   helpers:

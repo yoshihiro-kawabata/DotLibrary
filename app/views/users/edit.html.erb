@@ -1,10 +1,18 @@
-<h2 style="margin: 20px;"><%= t('.title') %></h2>
+<h2 style="margin: 20px;">アカウント編集</h2>
 <div class="user_box">
-
 <% if @user.errors.any? %>
   <div id="error_explanation">
     <ul>
     <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+<% if @sub_user.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @sub_user.errors.full_messages.each do |message| %>
       <li><%= message %></li>
     <% end %>
     </ul>
@@ -15,7 +23,26 @@
 
   <div class="d-flex flex-wrap">
     <div class="col-sm-12 col-lg-4">
-        <%= f.label :社員番号： %> 
+        <%= f.label :登録種別： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <% case @use_auth.authority_id %>
+      <% when 1 then %>
+          司書
+          <%= f.hidden_field :authority, :value => "司書" %>
+      <% when 2 then %>
+          書店
+          <%= f.hidden_field :authority, :value => "書店" %>
+      <% when 3 then %>
+          個人提供者
+          <%= f.hidden_field :authority, :value => "個人提供者" %>
+      <% else %>
+          不明  
+      <% end %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :個人番号： %>
     </div>
     <div class="col-sm-12 col-lg-8">
         <%= @user.number %>
@@ -25,35 +52,72 @@
         <%= f.label :名前： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.text_field :name, :size => 32, :placeholder => "30文字以内" %>
-    </div>
-    <div class="col-sm-12 col-lg-4">
-        <%= f.label :メールアドレス： %>
-    </div>
-    <div class="col-sm-12 col-lg-8">
-      <%= f.email_field :email, :size => 32 %>
+        <%= f.text_field :name, :size => 32,:value => @sub_user.name, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
-        <%= f.label :パスワード： %>
+      <%= f.label :パスワード： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-       <%= f.password_field :password, :placeholder => "半角英数字6文字以上" %>
+      <%= f.password_field :password, :placeholder => "半角英数字6文字以上" %>
     </div>
     <div class="col-sm-12 col-lg-4">
     </div>
     <div class="col-sm-12 col-lg-8">
-       <%= f.password_field :password_confirmation, :placeholder => "確認のため再入力" %>
+      <%= f.password_field :password_confirmation, :placeholder => "確認のため再入力" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :利用番号： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :sub_number, :size => 32,:value => @sub_user.sub_number, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :電話番号： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :phone, :size => 32,:value => @sub_user.phone, :placeholder => "30文字以内" %>
+    </div>
+
+<% if @use_auth.authority_id == 2 %>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :FAX： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :fax, :size => 32,:value => @sub_user.fax, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :担当者： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :manager, :size => 32,:value => @sub_user.manager, :placeholder => "30文字以内" %>
+    </div>
+<% end %>
+
+    <div class="col-sm-12 col-lg-4">
+      <%= f.label :メールアドレス： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.email_field :email, :size => 32,:value => @sub_user.email %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :住所： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.text_area :address, maxlength: "200" ,:value => @sub_user.address, class: "form-control",id: "exampleFormControlTextarea1", style: "height:100px; wrap:hard;" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
       <h4 style="margin-top: 30px;"><%= f.submit "更新", class: "btn btn-primary"  %></h4>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <h4 style="margin-top: 30px;"><%= link_to t('common.back'), jobs_manage_path %></h4>
+      <h4 style="margin-top: 30px;"><%= link_to t('common.back'), mypage_users_path %></h4>
     </div>
   </div>
 <% end %>
 </div>
-
 

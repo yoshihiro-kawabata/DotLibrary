@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
     t.bigint "book_id", null: false
     t.integer "quantity", null: false
     t.integer "price", null: false
-    t.text "rimit", null: false
+    t.text "limit", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_books_stores_on_book_id"
@@ -113,7 +113,11 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
 
   create_table "messages", force: :cascade do |t|
     t.text "content"
+    t.text "create_name"
+    t.bigint "create_id"
+    t.text "user_name"
     t.bigint "user_id", null: false
+    t.boolean "read_flg", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_messages_on_user_id"
@@ -127,7 +131,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
     t.string "receive_user_name", null: false
     t.integer "number", null: false
     t.boolean "complete_flg", default: false, null: false
-    t.text "rimit"
+    t.text "limit"
     t.text "condition"
     t.integer "price"
     t.datetime "created_at", precision: 6, null: false
