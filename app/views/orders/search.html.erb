@@ -1,0 +1,19 @@
+<h2 style="margin: 20px;">受発注検索</h2>
+<div class="new_box">
+
+<%= search_form_for @q, url: choice_orders_path do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-1">
+    </div>
+    <div class="col-sm-12 col-lg-3">
+      <%= f.label :keyword, '発注先：' %>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+    <%= f.select :id_eq, @sub_users, class: 'form-control' %>
+    </div>
+    <div class="col-sm-12 col-lg-2">
+      <%= f.submit '検索', class: "btn btn-primary"  %>
+    </div>
+  </div>
+  <% end %>
+</div>

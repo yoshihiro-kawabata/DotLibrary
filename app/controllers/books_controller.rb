@@ -5,7 +5,8 @@ class BooksController < ApplicationController
         
     def index
       @books =[]
-        @q.result.each do |book|
+      @sen = @q.result.order("id ASC")
+        @sen.each do |book|
           alBos = []
           case @c_job.authority_id 
             when 1 then #司書
@@ -56,7 +57,8 @@ class BooksController < ApplicationController
       
     def search
       @books =[]
-        @q.result.each do |book|
+      @sen = @q.result.order("id ASC")
+        @sen.each do |book|
           alBos = []
           case @c_job.authority_id 
             when 1 then #司書

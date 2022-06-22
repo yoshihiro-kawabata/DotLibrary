@@ -1,0 +1,101 @@
+<h2 style="margin: 20px;">受発注作成</h2>
+<div class="new_box">
+
+<%= search_form_for @q, url: choice_orders_path do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-1">
+    </div>
+    <div class="col-sm-12 col-lg-3">
+      <%= f.label :keyword, '発注先：' %>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+    <%= f.select :id_eq, @sub_users, class: 'form-control' %>
+    </div>
+    <div class="col-sm-12 col-lg-2">
+      <%= f.submit '検索', class: "btn btn-primary"  %>
+    </div>
+  </div>
+  <% end %>
+
+<%= form_with(model: @order, local: true) do |f| %>
+  <%= f.hidden_field :user_id, :value => @userA.id %>
+  <%= f.hidden_field :book_ids, :value => @book_select %>
+  <div class="d-flex flex-wrap">
+      <div class="col-sm-12 col-lg-4">
+        <%= f.label :受発注相手： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= @sub_user.name %>
+    </div>
+    <div class="col-sm-12 col-lg-12">
+      <table style="border:3px solid;">
+        <thead>
+          <tr>
+            <th style="width:200px;">書籍名</th>
+            <th style="width:150px;">希望受注数</th>
+            <th style="width:150px;">在庫数</th>
+            <% case @use_auth.authority_id %> 
+            <% when 2 then %> 
+              <th style="width:200px;">値段</th>
+            <% when 3 then %> 
+              <th style="width:200px;">譲渡貸借</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% @books.size.times do |n| %>
+            <tr>
+              <td style="border:2px solid">
+                <%= f.hidden_field :book_id, :value => @books[n][0] %>
+                <%= @books[n][1] %>
+              </td>
+              <td style="border:2px solid"><%= f.text_field :quantities, :name => "order[quantities][]" ,:size => 32, :placeholder => "在庫数以下で指定" %></td>
+              <td style="border:2px solid"><%= @books[n][2] %></td>
+              <td style="border:2px solid">
+                <% case @use_auth.authority_id %> 
+                <% when 2 then %> 
+                  <%= @books[n][3] %>
+                <% when 3 then %>
+                  <% if @books[n][3] == true %> 
+                      譲渡可能
+                  <% else %>
+                      貸借のみ
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :希望納期： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :limit, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :希望支払条件： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :condition, :size => 32, :placeholder => "30文字以内" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :進捗状態： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= f.select(:number, ["未依頼", "見積依頼"]) %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+      <h4 style="margin-top: 30px;"><%= f.submit "作成", class: "btn btn-primary"  %></h4>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+        <h4 style="margin-top: 30px;"><%= link_to t('common.back'), search_orders_path %></h4>
+    </div>
+
+  </div>
+<% end %>
+</div>

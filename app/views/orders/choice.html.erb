@@ -1,0 +1,75 @@
+<h2 style="margin: 20px;">受発注選択</h2>
+<div class="new_box">
+
+<%= search_form_for @q, url: choice_orders_path do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-1">
+    </div>
+    <div class="col-sm-12 col-lg-3">
+      <%= f.label :keyword, '発注先：' %>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+    <%= f.select :id_eq, @sub_users, class: 'form-control' %>
+    </div>
+    <div class="col-sm-12 col-lg-2">
+      <%= f.submit '検索', class: "btn btn-primary"  %>
+    </div>
+  </div>
+  <% end %>
+
+<%= form_with(model: @order, url: make_orders_path, local: true) do |f| %>
+  <%= f.hidden_field :user_id, :value => @userA.id %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :受発注相手： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= @sub_user.name %>
+    </div>
+    <div class="col-sm-12 col-lg-10">
+      <table style="border:3px solid;">
+        <thead>
+          <tr>
+            <th style="width:70px;">選択</th>
+            <th style="width:200px;">書籍名</th>
+            <th style="width:200px;">在庫数</th>
+            <% case @use_auth.authority_id %> 
+            <% when 2 then %> 
+              <th style="width:200px;">値段</th>
+            <% when 3 then %> 
+              <th style="width:200px;">譲渡貸借</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% @books.size.times do |n| %>
+            <tr>
+              <td style="border:2px solid">
+                <%= hidden_field_tag "order[book_ids][]", "" %>
+                <%= f.check_box :book_ids, { multiple: true }, @books[n][0], false %>
+              </td>
+              <td style="border:2px solid"><%= @books[n][1] %></td>
+              <td style="border:2px solid"><%= @books[n][2] %></td>
+              <td style="border:2px solid">
+                <% case @use_auth.authority_id %> 
+                <% when 2 then %> 
+                  <%= @books[n][3] %>
+                <% when 3 then %>
+                  <% if @books[n][3] == true %> 
+                      譲渡可能
+                  <% else %>
+                      貸借のみ
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-12 col-lg-2">
+      <h4 style="margin-top: 5px;"><%= f.submit "選択", class: "btn btn-primary"  %></h4>
+    </div>
+  </div>
+<% end %>
+</div>
