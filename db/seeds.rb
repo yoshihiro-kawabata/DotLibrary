@@ -249,4 +249,72 @@ Order.create!(
   ord_limit: "No",
   condition: "No",
   price: 0
-   )
+  )
+
+  4.times do |n|
+  Order.create!(
+    title: "【完了】テスト図書館#{n}_test",
+    user_id: "#{n + 4}",
+    user_name: "テスト図書館#{n}",
+    receive_user_id: "#{n + 8}",
+    receive_user_name: "テスト書店#{n}",
+    number: 12,
+    complete_flg: true,
+    ord_limit: "テスト日末日",
+    condition: "月末払い",
+    price: (n + 2) * 3000 
+  )
+  end
+
+  4.times do |n|
+  Comment.create!(
+    user_name: "テスト図書館#{n}",
+    content: "テストコメント#{n}です",
+    order_id: "#{n + 1}",
+    user_id: "#{n + 4}"
+  )
+  end
+  
+  4.times do |n|
+    Comment.create!(
+      user_name: "テスト書店#{n}",
+      content: "テストコメント#{n + 4}です",
+      order_id: "#{n + 1}",
+      user_id: "#{n + 8}"
+    )
+  end
+
+  4.times do |n|
+    Detail.create!(
+      name: "test#{n + 2}",
+      quantity: "#{n + 2}",
+      price: (n + 2) * 500,
+      remark: "---",
+      order_id: "#{n + 1}"
+    )
+
+    Detail.create!(
+      name: "送料",
+      quantity: 0,
+      price: (n + 2) * 500,
+      remark: "送料",
+      order_id: "#{n + 1}"
+    )
+
+    Detail.create!(
+      name: "装備費",
+      quantity: 0,
+      price: (n + 2) * 800,
+      remark: "装備費用",
+      order_id: "#{n + 1}"
+    )
+
+    Detail.create!(
+      name: "その他",
+      quantity: 0,
+      price: (n + 2) * 1200,
+      remark: "テストデータ#{n}",
+      order_id: "#{n + 1}"
+    )
+
+  end
