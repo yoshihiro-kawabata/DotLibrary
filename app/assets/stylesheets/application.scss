@@ -231,12 +231,42 @@ body{
   .example th:first-child{
     border-left: 2px solid #999;
   }
+
+  .example_talk{
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 300px;
+    margin:auto;
+  }
+  .example_talk table{
+    margin: 0;
+    border-spacing: 0;
+  }
+
+  .example_talk td{
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  .example_talk th{
+    white-space: nowrap;
+    position: sticky;
+    background-color: #fef4f4;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
   
   .new_box{
     width: 40%;
     margin: auto;
   }
-  
+
+  .order_box{
+    width: 80%;
+    margin: auto;
+  }
+
   .user_box{
     width: 40%;
     margin: auto;
@@ -250,6 +280,12 @@ body{
   .form-control #exampleFormControlTextarea1{
     width: 40%;
     height: 100px;
+  }
+
+  .boxA{
+    white-space:pre-wrap; 
+    width: 600px;
+    word-wrap: break-word;
   }
     
   @import "bootstrap";

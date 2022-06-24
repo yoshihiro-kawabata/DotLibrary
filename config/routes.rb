@@ -3,9 +3,12 @@ Rails.application.routes.draw do
 
   resources :sessions, only: [:new, :create, :destroy]
 
+  resources :comments
+
   resources :orders do
     collection do
-      get 'commit'
+      get 'history'
+      get 'talk'
       get 'choice'
       get 'search'
       post 'make'

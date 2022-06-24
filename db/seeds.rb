@@ -235,3 +235,18 @@ book = Book.create!(
       hand_flg: false
     )
   end
+
+#master_order
+Order.create!(
+  id: 0,
+  title: "masterorder",
+  user_id: 2,
+  user_name: "master書店",
+  receive_user_id: 1,
+  receive_user_name: "master図書館",
+  number: 0,
+  complete_flg: false,
+  ord_limit: "No",
+  condition: "No",
+  price: 0
+   )

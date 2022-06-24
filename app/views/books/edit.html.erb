@@ -67,13 +67,13 @@
           <%= f.label :在庫数： %>
         </div>
         <div class="col-sm-12 col-lg-8">
-          <%= f.text_field :quantity, :size => 32,:value => @sub_book.quantity, :placeholder => "30文字以内" %>
+          <%= f.text_field :quantity, :size => 32, :maxlength => 7,:value => @sub_book.quantity, :placeholder => "30文字以内" %>
         </div>
         <div class="col-sm-12 col-lg-4">
           <%= f.label :値段： %>
         </div>
         <div class="col-sm-12 col-lg-8">
-          <%= f.text_field :price, :size => 32,:value => @sub_book.price, :placeholder => "30文字以内" %>
+          <%= f.text_field :price, :size => 32, :maxlength => 7,:value => @sub_book.price, :placeholder => "30文字以内" %>
         </div>
         <div class="col-sm-12 col-lg-4">
           <%= f.label :納期： %>
@@ -86,7 +86,7 @@
           <%= f.label :在庫数： %>
         </div>
         <div class="col-sm-12 col-lg-8">
-          <%= f.text_field :quantity, :size => 32,:value => @sub_book.quantity, :placeholder => "30文字以内" %>
+          <%= f.text_field :quantity, :size => 32, :maxlength => 7,:value => @sub_book.quantity, :placeholder => "30文字以内" %>
         </div>
         <div class="col-sm-12 col-lg-4">
           <%= f.label :譲渡貸借： %>

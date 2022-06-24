@@ -1,0 +1,37 @@
+<h2 style="margin: 20px;">受発注履歴</h2>
+<div class="order_box">
+
+<% unless @orders.present? %>
+  <h2 style="margin: 20px;">受発注履歴はありません。</h2>
+<% else %>
+
+<div class="example">
+<table style="border:3px solid">
+  <thead>
+    <tr>
+      <th style="width:150px;">完了日付</th>
+      <th style="width:200px;">
+      <% if @c_job.authority_id == 1 %>
+        発注先
+      <% else %>
+        受注元
+      <% end %>      
+      </th>
+      <th style="width:500px;">タイトル</th>
+      <th style="width:50px;">確認</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td style="border:2px solid"><%= order.updated_at.strftime('%Y年%m月%d日') %></td>
+        <td style="border:2px solid"><%= order.user_name %></td>
+        <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 400px; "><%= order.title %></td>
+        <td style="border:2px solid"><%= link_to '確認', talk_orders_path(order_id: order.id) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<% end %>
+</div>

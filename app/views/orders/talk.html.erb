@@ -1,0 +1,69 @@
+<%= javascript_pack_tag 'talk' %>
+
+<div class="order_box">
+
+<div id="target" class="example_talk">
+<table>
+  <thead>
+    <tr>
+      <th style="width:50px; text-align:right;">題名：</th>
+      <th style="width:100%;"><%= @order.title %></th>
+    </tr>
+  </thead>
+  <tbody>
+
+<% unless @talks.present? %>
+      <tr>
+        <td></td>
+          <td>コメントはまだありません。</td>
+      </tr>
+<% else %>
+    <% comment_count = 1 %>
+
+    <% @talks.each do |comment| %>
+      <tr>
+        <td style="text-align:right;"><%= comment_count %>：</td>
+        <td style="width:600px;"><%= comment.user_name %>　<%= comment.created_at.strftime('%Y年%m月%d日 %H:%M:%S') %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="width:600px;"><div class="boxA"><%= comment.content %></div></td>
+      </tr>
+          <% comment_count += 1 %>
+    <% end %>
+  </tbody>
+<% end %>
+</table>
+</div>
+<br>
+
+<div style="display: flex; margin:auto; text-align: center; background-color: #fef4f4;">
+  <div class="col-sm-12 col-lg-4">
+      <h4>受発注連絡</h4>
+  </div>
+  <div class="col-sm-12 col-lg-4">
+      <h4><%= link_to 'データ確認', order_path(@order.id)  %></h4>
+  </div>
+
+<% unless @order.complete_flg? %>
+
+  <div class="col-sm-12 col-lg-4">
+      <h4><%= link_to 'データ更新', edit_order_path(@order.id) %></h4>
+  </div>
+</div>
+
+<br>
+
+<%= form_with(model: @comment, local: true) do |f| %>
+  <%= f.hidden_field :order_id, :value => @order.id %>
+  <div class="d-flex flex-wrap">
+      <div class="col-sm-12 col-lg-10">
+  <%= f.text_area :content, maxlength: "200" ,class: "form-control",id: "exampleFormControlTextarea1", style: "height:100px; wrap:hard;" %>
+    </div>
+    <div class="col-sm-12 col-lg-2">
+      <h4 style="margin-top: 30px;"><%= f.submit "コメント", class: "btn btn-primary"  %></h4>
+    </div>
+  </div>
+<% end %>
+<% end %>
+</div>

@@ -1,16 +1,1 @@
-<h2 style="margin: 20px;">受発注作成</h2>
-<div class="new_box">
-
-  <div class="d-flex flex-wrap">
-    <div class="col-sm-12 col-lg-3">
-        発注先：
-    </div>
-    <div class="col-sm-12 col-lg-8">
-        <%= form_with model: @order, url: orders_path do |f| %>
-          <%= f.select :id, @sub_users,  include_blank: "選択して下さい" %>
-          <%= f.submit '検索'%>
-        <% end %>
-    </div>
-
-  </div>
-</div>
+<h2 style="margin: 20px;">new</h2>

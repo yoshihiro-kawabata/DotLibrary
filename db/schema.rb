@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.string "title", null: false
+    t.string "user_name", null: false
     t.string "content"
     t.bigint "order_id", null: false
     t.bigint "user_id", null: false
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
     t.string "name", null: false
     t.integer "quantity"
     t.integer "price"
+    t.text "remark"
     t.bigint "order_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -131,7 +132,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
     t.string "receive_user_name", null: false
     t.integer "number", null: false
     t.boolean "complete_flg", default: false, null: false
-    t.text "limit"
+    t.text "ord_limit"
     t.text "condition"
     t.integer "price"
     t.datetime "created_at", precision: 6, null: false

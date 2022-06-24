@@ -1,0 +1,134 @@
+<h2 style="margin: 20px;">受発注更新</h2>
+<div class="order_box">
+
+<% if @order.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @order.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @detail.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @detail.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-12">
+        <%= @order.title %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <% if @c_job.authority_id == 1 %>
+        発注先：
+      <% else %>
+        受注元：
+      <% end %>      
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        メールアドレス：
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        電話番号：
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= @user.name %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= @user.email %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= @user.phone %>
+    </div>
+  </div>
+
+<%= form_with(model: @order, local: true) do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-12">
+      <table style="border:3px solid">
+        <thead>
+          <tr>
+            <th style="width:300px;">書籍名・費用</th>
+            <th style="width:150px;">注文数</th>
+            <th style="width:150px;">値段</th>
+            <th style="width:150px;">備考</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @details.each do |detail| %>
+          <tr>
+            <td style="border:2px solid"><%= detail.name %></td>
+            <td style="border:2px solid"><%= detail.quantity %></td>
+            <td style="border:2px solid"><%= detail.price %></td>
+            <td style="border:2px solid"><%= detail.remark %></td>
+          </tr>
+          <% end %>
+          <% if @order.number == 3 %>
+          <tr>
+            <td style="border:2px solid">送料</td>
+            <td style="border:2px solid">---</td>
+            <td style="border:2px solid"><%= f.text_field :postage, :placeholder => "送料", :maxlength => 7, :size => 15 %></td>
+            <td style="border:2px solid">---</td>
+          </tr>
+          <tr>
+            <td style="border:2px solid">装備費</td>
+            <td style="border:2px solid">---</td>
+            <td style="border:2px solid"><%= f.text_field :equipment, :placeholder => "装備費", :size => 15, :maxlength => 7 %></td>
+            <td style="border:2px solid">---</td>
+          </tr>
+          <tr>
+            <td style="border:2px solid">その他</td>
+            <td style="border:2px solid">---</td>
+            <td style="border:2px solid"><%= f.text_field :other, :placeholder => "その他", :size => 15, :maxlength => 7 %></td>
+            <td style="border:2px solid"><%= f.text_field :other_remark, :placeholder => "備考", :size => 15, :maxlength => 15 %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @order.number == 3 %>
+        <div class="col-sm-12 col-lg-6">
+            納期更新：<%= f.text_field :ord_limit, :size => 32, :placeholder => "30文字以内" %>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            支払い条件：<%= f.text_field :condition, :size => 32, :placeholder => "30文字以内" %>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            進捗状況：<%= f.select(:number, [@number]) %>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            更新前合計：<%= @order.price %>円
+        </div>
+    <% else %>
+        <div class="col-sm-12 col-lg-6">
+            納期更新：<%= @order.ord_limit %>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            支払い条件：<%= @order.condition %>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            進捗状況：<%= f.select(:number, [@number]) %>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            合計：<%= @order.price %>円
+        </div>
+    <% end %>
+        <div class="col-sm-12 col-lg-6">
+            <h4 style="margin-top: 30px;"><%= f.submit "更新", class: "btn btn-primary"  %></h4>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <h4 style="margin-top: 30px;"><%= link_to '戻る', talk_orders_path(order_id: @order.id) %></h4>
+        </div>
+
+</div>
+  <% end %>
+</div>

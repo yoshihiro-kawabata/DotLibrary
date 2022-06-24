@@ -1,14 +1,33 @@
 <h2 style="margin: 20px;">受発注作成</h2>
-<div class="new_box">
+<div class="order_box">
+
+<% if @order.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @order.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @detail.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% @detail.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
 
 <%= search_form_for @q, url: choice_orders_path do |f| %>
   <div class="d-flex flex-wrap">
-    <div class="col-sm-12 col-lg-1">
-    </div>
     <div class="col-sm-12 col-lg-3">
       <%= f.label :keyword, '発注先：' %>
     </div>
-    <div class="col-sm-12 col-lg-6">
+    <div class="col-sm-12 col-lg-7">
     <%= f.select :id_eq, @sub_users, class: 'form-control' %>
     </div>
     <div class="col-sm-12 col-lg-2">
@@ -31,14 +50,15 @@
       <table style="border:3px solid;">
         <thead>
           <tr>
-            <th style="width:200px;">書籍名</th>
-            <th style="width:150px;">希望受注数</th>
-            <th style="width:150px;">在庫数</th>
+            <th style="border:2px solid; width:200px;">書籍名</th>
+            <th style="border:2px solid; width:250px;">希望受注数</th>
+            <th style="border:2px solid; width:100px;">在庫数</th>
             <% case @use_auth.authority_id %> 
             <% when 2 then %> 
-              <th style="width:200px;">値段</th>
+              <th style="border:2px solid; width:100px;">値段</th>
             <% when 3 then %> 
-              <th style="width:200px;">譲渡貸借</th>
+              <th style="border:2px solid; width:100px;">備考</th>
+              <th style="border:2px solid; width:100px;">譲渡貸借</th>
             <% end %>
           </tr>
         </thead>
@@ -49,20 +69,30 @@
                 <%= f.hidden_field :book_id, :value => @books[n][0] %>
                 <%= @books[n][1] %>
               </td>
-              <td style="border:2px solid"><%= f.text_field :quantities, :name => "order[quantities][]" ,:size => 32, :placeholder => "在庫数以下で指定" %></td>
+              <td style="border:2px solid"><%= f.text_field :quantities, :name => "order[quantities][]" ,:size => 20, :maxlength => 7, :placeholder => "在庫数以下で指定" %></td>
               <td style="border:2px solid"><%= @books[n][2] %></td>
-              <td style="border:2px solid">
                 <% case @use_auth.authority_id %> 
                 <% when 2 then %> 
+              <td style="border:2px solid">
                   <%= @books[n][3] %>
+              </td>
                 <% when 3 then %>
                   <% if @books[n][3] == true %> 
+              <td style="border:2px solid">
+                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :placeholder => "例：譲渡希望、貸借希望" %>
+              </td>
+              <td style="border:2px solid">
                       譲渡可能
+              </td>
                   <% else %>
+              <td style="border:2px solid">
+                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :placeholder => "例：貸借希望" %>
+              </td>
+              <td style="border:2px solid">
                       貸借のみ
+              </td>
                   <% end %>
                 <% end %>
-              </td>
             </tr>
           <% end %>
         </tbody>
@@ -72,7 +102,7 @@
         <%= f.label :希望納期： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :limit, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :ord_limit, :size => 32, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
@@ -93,7 +123,7 @@
       <h4 style="margin-top: 30px;"><%= f.submit "作成", class: "btn btn-primary"  %></h4>
     </div>
     <div class="col-sm-12 col-lg-6">
-        <h4 style="margin-top: 30px;"><%= link_to t('common.back'), search_orders_path %></h4>
+        <h4 style="margin-top: 30px;"><%= link_to t('common.back'), choice_orders_path(user_id: @userA.id) %></h4>
     </div>
 
   </div>

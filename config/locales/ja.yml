@@ -37,6 +37,9 @@ ja:
         title: タイトル
       detail: 
         title: タイトル
+        quantity: 在庫
+        price: 値段
+        remark: 備考
       library:
         sub_number: 利用番号
         name: 名前
@@ -61,6 +64,8 @@ ja:
         address: 住所
       order: 
         title: タイトル
+        ord_limit: 納期
+        condition: 支払条件
       user:
         number: 個人番号
         name: 名前

@@ -1,16 +1,69 @@
 <h2 style="margin: 20px;">受発注詳細</h2>
-<div class="new_box">
+<div class="order_box">
 
   <div class="d-flex flex-wrap">
-    <div class="col-sm-12 col-lg-3">
-        発注先：
+    <div class="col-sm-12 col-lg-12">
+        <%= @order.title %>
     </div>
-    <div class="col-sm-12 col-lg-8">
-        <%= form_with model: @order, url: orders_path do |f| %>
-          <%= f.select :id, @sub_users,  include_blank: "選択して下さい" %>
-          <%= f.submit '検索'%>
-        <% end %>
+    <div class="col-sm-12 col-lg-4">
+      <% if @c_job.authority_id == 1 %>
+        発注先：
+      <% else %>
+        受注元：
+      <% end %>      
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        メールアドレス：
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        電話番号：
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= @user.name %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= @user.email %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        <%= @user.phone %>
+    </div>
+    <div class="col-sm-12 col-lg-12">
+      <table style="border:3px solid">
+        <thead>
+          <tr>
+            <th style="width:300px;">書籍名・費用</th>
+            <th style="width:150px;">注文数</th>
+            <th style="width:150px;">値段</th>
+            <th style="width:150px;">備考</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @details.each do |detail| %>
+          <tr>
+            <td style="border:2px solid"><%= detail.name %></td>
+            <td style="border:2px solid"><%= detail.quantity %></td>
+            <td style="border:2px solid"><%= detail.price %></td>
+            <td style="border:2px solid"><%= detail.remark %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
 
+    <div class="col-sm-12 col-lg-6">
+        納期：<%= @order.ord_limit %>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+        支払い条件：<%= @order.condition %>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+        進捗状況：<%= @number %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+        合計：<%= @order.price %>円
+    </div>
+    <div class="col-sm-12 col-lg-2">
+        <%= link_to '戻る', talk_orders_path(order_id: @order.id) %>
+    </div>
   </div>
 </div>

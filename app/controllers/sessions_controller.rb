@@ -11,11 +11,11 @@ class SessionsController < ApplicationController
 
         case authority.authority_id
         when 1 then #司書
-          sub_user = Library.find_by(user_id:authority.user_id)
+          sub_user = Library.find_by(user_id:authority.user_id, sub_number:params[:session][:sub_number].downcase)
         when 2 then #書店
-          sub_user = Store.find_by(user_id:authority.user_id)
+          sub_user = Store.find_by(user_id:authority.user_id, sub_number:params[:session][:sub_number].downcase)
         when 3 then #個人提供者
-          sub_user = Provider.find_by(user_id:authority.user_id)       
+          sub_user = Provider.find_by(user_id:authority.user_id, sub_number:params[:session][:sub_number].downcase)
         end
       
         if sub_user

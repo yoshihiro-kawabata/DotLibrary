@@ -4,6 +4,7 @@ class CreateDetails < ActiveRecord::Migration[6.0]
       t.string :name, null: false
       t.integer :quantity
       t.integer :price
+      t.text :remark
       t.references :order, null: false, foreign_key: true
 
       t.timestamps
