@@ -71,7 +71,7 @@
             <td style="border:2px solid"><%= detail.remark %></td>
           </tr>
           <% end %>
-          <% if @order.number == 3 %>
+          <% if @order.number == 3  %>
           <tr>
             <td style="border:2px solid">送料</td>
             <td style="border:2px solid">---</td>
@@ -103,7 +103,7 @@
             支払い条件：<%= f.text_field :condition, :size => 32, :placeholder => "30文字以内" %>
         </div>
         <div class="col-sm-12 col-lg-6">
-            進捗状況：<%= f.select(:number, [@number]) %>
+            進捗状況：<%= f.select(:number, @number) %>
         </div>
         <div class="col-sm-12 col-lg-6">
             更新前合計：<%= @order.price %>円
@@ -116,7 +116,7 @@
             支払い条件：<%= @order.condition %>
         </div>
         <div class="col-sm-12 col-lg-6">
-            進捗状況：<%= f.select(:number, [@number]) %>
+            進捗状況：<%= f.select(:number, @number) %>
         </div>
         <div class="col-sm-12 col-lg-6">
             合計：<%= @order.price %>円

@@ -1,7 +1,12 @@
 class BooksController < ApplicationController
     before_action :login_required
+    before_action :library_required, only: [:new, :create]
+    skip_before_action :store_required
+    skip_before_action :provider_required
     before_action :set_book, only: [:show, :edit, :update]
     before_action :set_q, only: [:index, :search]
+    before_action :correct_book, only: [:show, :edit, :update]
+
         
     def index
       @books =[]
@@ -155,6 +160,17 @@ class BooksController < ApplicationController
         @sub_book.book_id = @book.id
         @sub_book.save
 
+        libraries = Library.all
+        libraries.each do |library|
+          Message.create!(
+            content: "書籍を追加しました！\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
+            create_name: @current_job.name,
+            create_id: @current_user.id,
+            user_name: library.name,
+            user_id: library.user_id
+          )  
+        end
+        
         redirect_to books_path
         flash[:notice] = '書籍を登録しました'
       else
@@ -205,13 +221,16 @@ class BooksController < ApplicationController
         end
       end
 
+      @book.name = params[:book][:name]
+      @book.number = params[:book][:number]
+
       if params[:book][:image_ids].present? && params[:book][:images].present?
         flash[:notice] = '書籍情報を更新出来ませんでした'
         @book.errors.add(:images, "の削除、追加の操作は同時に行えません")
         render :edit
       else
         if @book.valid? && @sub_book.valid?
-
+        
           if params[:book][:images].present? && params[:book][:images].count > 4            
             flash[:notice] = '書籍情報を更新出来ませんでした'
             @book.errors.add(:add_images, "は4枚以内にしてください")
@@ -230,6 +249,18 @@ class BooksController < ApplicationController
                 when 3 then #個人提供者
                   @sub_book.update(provider_params)
               end
+
+              libraries = Library.all
+              libraries.each do |library|
+                Message.create!(
+                  content: "書籍データを更新しました。\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
+                  create_name: @current_job.name,
+                  create_id: @current_user.id,
+                  user_name: library.name,
+                  user_id: library.user_id
+                )  
+              end
+      
                 redirect_to book_path(@book.id)
                 flash[:notice] = '書籍情報を更新しました'
             else
@@ -261,8 +292,28 @@ class BooksController < ApplicationController
         params.require(:book).permit(:quantity)
       end
 
+      def correct_book
+        redirect_to books_path, notice: 'その書籍にはアクセスできません' unless current_book?(@book)
+      end
+
+      def current_book?(book)
+        if @c_job.authority_id == 1
+          true
+        else
+          bookC = BooksStore.find_by(book_id:book.id)        
+          if bookC.nil?
+            bookC = BooksProvider.find_by(book_id:book.id)
+            current_book = Provider.find(bookC.provider_id)
+          else
+            current_book = Store.find(bookC.store_id)
+          end
+          current_book.user_id == @current_user.id
+        end
+      end
 
       def set_q
         @q = Book.ransack(params[:q])
       end
+
+
 end

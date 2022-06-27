@@ -35,5 +35,17 @@ module SessionsHelper
         user == @current_user
     end
 
+    def current_library?(c_job)
+        c_job.authority_id == 1
+    end
+
+    def current_store?(c_job)
+        c_job.authority_id == 2
+    end
+
+    def current_provider?(c_job)
+        c_job.authority_id == 3
+    end
+
 
 end

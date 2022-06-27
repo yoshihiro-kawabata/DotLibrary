@@ -1,5 +1,9 @@
 class DetailsController < ApplicationController
     before_action :login_required
+    skip_before_action :library_required
+    skip_before_action :store_required
+    skip_before_action :provider_required
+
 
     def create
         @comment = Comment.new(comment_params)

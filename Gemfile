@@ -29,7 +29,6 @@ gem 'cloudinary', require: true
 gem 'activestorage-cloudinary-service' 
 gem 'active_storage_validations'
 
-
 gem 'rails-i18n'
 
 gem 'aws-sdk-s3', require: false
@@ -45,6 +44,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'bootstrap', '~> 4.4.1'
 gem 'jquery-rails'
+
+gem 'bootstrap4-kaminari-views'
 
 
 group :development, :test do

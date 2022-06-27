@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
     before_action :login_required
+    skip_before_action :library_required
+    before_action :store_required,  only: [:new, :create]
+    before_action :provider_required,  only: [:new, :create]
     before_action :set_user,  only: [:show, :edit, :update, :destroy]
     before_action :set_sub_user,  only: [:show, :edit, :update]
     before_action :correct_user, only: [:edit, :update]
@@ -78,10 +81,52 @@ class UsersController < ApplicationController
           render :new
         end
       end
-    
+
       def mypage
+
         @user = User.find(@current_user.id)
-        @messages = Message.where(user_id: @current_user.id,read_flg: false).count 
+        @messages = Message.where(user_id: @current_user.id,read_flg: false).count
+        if @c_job.authority_id == 1
+          @orders = Order.where(user_id: @current_user.id, complete_flg: false)
+          @orders_count = 0
+          @orders.each do |order|
+            order.number += 1
+            if order.number.in?([1,2,4,6,8,10,12])
+              @orders_count += 1
+            end
+          end
+
+          @end_orders = Order.where(user_id: @current_user.id, complete_flg: true)
+          @end_orders_count = 0
+          @end_orders.each do |order|
+            comment = Comment.where(order_id: order.id).last
+
+            if comment.created_at > order.updated_at
+              @end_orders_count += 1
+            end
+          end
+
+        else          
+          @orders = Order.where(receive_user_id: @current_user.id, complete_flg: false)
+          @orders_count = 0
+          @orders.each do |order|
+            order.number += 1
+            if order.number.in?([3,5,7,9,11,13])
+              @orders_count += 1
+            end
+          end
+
+          @end_orders = Order.where(receive_user_id: @current_user.id, complete_flg: true)
+          @end_orders_count = 0
+          @end_orders.each do |order|
+            comment = Comment.where(order_id: order.id).last
+
+            if comment.created_at > order.updated_at
+              @end_orders_count += 1
+            end
+          end
+        end
+      @messages = Message.where(user_id: @current_user.id,read_flg: false).count
         set_sub_user
       end
 

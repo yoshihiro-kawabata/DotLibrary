@@ -1,10 +1,14 @@
 class OrdersController < ApplicationController
       before_action :login_required
+      skip_before_action :library_required
+      before_action :store_required, only: [:choice, :search, :make, :create]
+      before_action :provider_required, only: [:choice, :search, :make, :create]
       before_action :set_order, only: [:show, :edit, :update]
       before_action :set_q, only: [:choice, :search, :make, :create]
       before_action :set_search, only: [:choice, :search, :make, :create]
       before_action :set_choice, only: [:choice]
       before_action :set_make, only: [:make, :create]
+      before_action :order_required, only: [:show, :edit, :update]
 
       def index
         case @c_job.authority_id 
@@ -31,26 +35,71 @@ class OrdersController < ApplicationController
         end
       end
 
-
       def talk
         @order = Order.find(params[:order_id])
         @comment = Comment.new
         @talks = Comment.where(order_id: @order.id).order("created_at ASC")
+        order_required
+
+        if @order.complete_flg? && @talks.last.created_at > @order.updated_at
+          @order.update(created_at: DateTime.current)
+        end
       end
 
       def show
       end
 
       def edit
+        if @c_job.authority_id == 1
+          if @order.number.in?([3,5,7,9,11,13])
+            flash[:notice] = '受注側の更新をお待ちください'
+            redirect_to order_path(@order.id)
+          end
+        else
+          if @order.number.in?([1,2,4,6,8,10,12])
+            flash[:notice] = '発注側の更新をお待ちください'
+            redirect_to order_path(@order.id)
+          end
+        end
       end
   
       def update
 
         order_up = @order
-
-        select_number(order_up)
-              
+        select_number(order_up)              
         case @order.number 
+        when 2 then 
+          order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
+
+          if params[:order][:number] == "見積依頼（差し戻し）"
+            @detail_post = Detail.find_by(order_id: order_up.id, quantity: 0, name: "送料")
+            @detail_equip = Detail.find_by(order_id: order_up.id, quantity: 0, name: "装備費")
+            @detail_other = Detail.find_by(order_id: order_up.id, quantity: 0, name: "その他")
+            order_up.price = order_up.price - @detail_post.price - @detail_equip.price - @detail_other.price
+
+            if @order.update(title: order_up.title, number: order_up.number, price: order_up.price)
+              @detail_post.destroy
+              @detail_equip.destroy
+              @detail_other.destroy
+              comment_create(params[:order][:number])
+              flash[:notice] = '受発注情報の更新が完了しました'
+              redirect_to talk_orders_path(order_id: @order.id)
+            else
+              flash[:notice] = '受発注情報が更新できませんでした'
+              render :edit    
+            end
+          
+          else
+            if @order.update(title: order_up.title, number: order_up.number)
+              comment_create(params[:order][:number])
+              flash[:notice] = '受発注情報の更新が完了しました'
+              redirect_to talk_orders_path(order_id: @order.id)
+            else
+              flash[:notice] = '受発注情報が更新できませんでした'
+              render :edit    
+            end
+          end
+
         when 3 then 
            order_up.ord_limit = params[:order][:ord_limit]
            order_up.condition = params[:order][:condition]
@@ -102,6 +151,7 @@ class OrdersController < ApplicationController
                 deta.order_id = @order.id
                 deta.save
               end
+              comment_create(params[:order][:number])
               flash[:notice] = '受発注情報の更新が完了しました'
               redirect_to talk_orders_path(order_id: @order.id)
             end
@@ -109,11 +159,102 @@ class OrdersController < ApplicationController
             flash[:notice] = '受発注情報が更新できませんでした'
             render :edit    
           end
-        when 12 then 
+
+        when 5 then 
+          use_auth = UsersAuthority.find_by(user_id: @order.receive_user_id)
+          details = Detail.where(order_id: order_up.id)
+
+          case use_auth.authority_id 
+          when 2 then   
+            storeA = Store.find_by(user_id: @order.receive_user_id)
+            details.each do |detail| #在庫操作
+              if detail.quantity > 0
+
+                bookB = BooksStore.select('book_id').where(store_id: storeA.id)
+                book = Book.where(id: bookB, name: detail.name)
+                bookA = BooksStore.where(book_id: book.ids, store_id: storeA.id)
+
+                if book.present? && bookA.count == 1
+                  book_quant = bookA[0].quantity - detail.quantity
+                  if book_quant < 0
+                    @order.errors.add(detail.name, "：在庫が足りていません。見積完了後に在庫数が減少した可能性があります。")
+                    @order.errors.add(detail.name, "：登録している書籍の在庫数を修正してください。")
+                  end
+                else
+                  @order.errors.add(detail.name, "：名前が存在しない、もしくは複数登録されています。")
+                  @order.errors.add(detail.name, "：登録している書籍の名前を元に戻してください。")
+                end
+              end
+            end
+          when 3 then   
+            providerA = Provider.find_by(user_id: @order.receive_user_id)
+            details.each do |detail| #在庫操作
+              if detail.quantity > 0
+
+                bookB = BooksProvider.select('book_id').where(provider_id:providerA.id)
+                book = Book.where(id: bookB, name: detail.name)
+                bookA = BooksProvider.where(book_id: book.ids, provider_id:providerA.id)
+
+                if book.present? && bookA.count == 1
+                  book_quant = bookA[0].quantity - detail.quantity
+                  if book_quant < 0
+                    @order.errors.add(detail.name, "：在庫が足りていません。見積完了後に在庫数が減少した可能性があります。")
+                    @order.errors.add(detail.name, "：登録している書籍の在庫数を修正してください。")
+                  end
+                else
+                  @order.errors.add(detail.name, "：名前が存在しない、もしくは複数登録されています。")
+                  @order.errors.add(detail.name, "：登録している書籍の名前を元に戻してください。")
+                end
+              end
+            end
+          end
+  
+          if @order.errors.present?
+            flash[:notice] = '受発注情報が更新できませんでした'
+            render :edit
+          else
+
+            case use_auth.authority_id 
+            when 2 then   
+              storeA = Store.find_by(user_id: @order.receive_user_id)
+              details.each do |detail| #在庫操作
+                if detail.quantity > 0  
+                  bookB = BooksStore.select('book_id').where(store_id: storeA.id)
+                  book = Book.where(id: bookB, name: detail.name)
+                  bookA = BooksStore.where(book_id: book.ids, store_id: storeA.id)
+                  book_quant = bookA[0].quantity - detail.quantity
+                  bookA[0].update(quantity: book_quant)
+                end
+              end
+            when 3 then   
+              providerA = Provider.find_by(user_id: @order.receive_user_id)
+              details.each do |detail| #在庫操作
+                if detail.quantity > 0
+                  bookB = BooksProvider.select('book_id').where(provider_id:providerA.id)
+                  book = Book.where(id: bookB, name: detail.name)
+                  bookA = BooksProvider.where(book_id: book.ids, provider_id:providerA.id)
+                  book_quant = bookA[0].quantity - detail.quantity
+                  bookA[0].update(quantity: book_quant)
+                end
+              end
+            end
+  
+            order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
+            if @order.update(title: order_up.title, number: order_up.number)
+              comment_create(params[:order][:number])
+              flash[:notice] = '受発注情報の更新が完了しました'
+              redirect_to talk_orders_path(order_id: @order.id)
+            else
+              flash[:notice] = '受発注情報が更新できませんでした'
+              render :edit    
+            end
+          end
+        when 13 then 
           order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
           order_up.price = @order.price + params[:order][:postage].to_i + params[:order][:equipment].to_i + params[:order][:other].to_i
           order_up.complete_flg = true
           if @order.update(title: order_up.title, number: order_up.number, complete_flg: order_up.complete_flg)
+            comment_create(params[:order][:number])
             flash[:notice] = '受発注が完了しました'
             redirect_to orders_path
           else
@@ -123,6 +264,7 @@ class OrdersController < ApplicationController
         else
           order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
           if @order.update(title: order_up.title, number: order_up.number)
+            comment_create(params[:order][:number])
             flash[:notice] = '受発注情報の更新が完了しました'
             redirect_to talk_orders_path(order_id: @order.id)
           else
@@ -240,6 +382,9 @@ class OrdersController < ApplicationController
             detail_box.each do |deta|
               deta.order_id = @order.id
               deta.save
+            end
+            if @order.number = 2
+              comment_create(params[:order][:number])
             end
             flash[:notice] = '受発注情報の登録が完了しました'
             redirect_to mypage_users_path
@@ -429,24 +574,22 @@ class OrdersController < ApplicationController
         when 4 then 
             order.receive_user_name = "発注依頼"
         when 5 then 
-          if @c_job.authority_id == 1
             order.receive_user_name = "発注完了"
-          else
-            order.receive_user_name = "納品待ち"
-          end
         when 6 then 
             order.receive_user_name = "納品完了"
         when 7 then 
-            order.receive_user_name = "受領依頼"
+            order.receive_user_name = "受領申請"
         when 8 then 
             order.receive_user_name = "受領完了"
         when 9 then 
-            order.receive_user_name = "請求依頼"
+            order.receive_user_name = "請求申請"
         when 10 then 
           order.receive_user_name = "支払完了"
         when 11 then 
-            order.receive_user_name = "領収依頼"
+            order.receive_user_name = "領収申請"
         when 12 then 
+          order.receive_user_name = "領収完了"
+        when 13 then 
           order.receive_user_name = "完了"
         end
       end
@@ -455,33 +598,31 @@ class OrdersController < ApplicationController
       def select_time(order)
         case order.number
         when 1 then 
-          @number = "未依頼"
+          @number = ["未依頼", "取引終了"]
         when 2 then 
-          @number = "見積依頼"
+          @number = ["見積依頼", "取引終了"]
         when 3 then 
-            @number = "見積完了"
+            @number = ["見積完了", "取引終了"]
         when 4 then 
-            @number = "発注依頼"
+            @number = ["発注依頼","見積依頼（差し戻し）", "取引終了"]
         when 5 then 
-          if @c_job.authority_id == 1
-            @number = "発注完了"
-          else
-            @number = "納品待ち"
-          end
+            @number = ["発注完了", "取引終了"]
         when 6 then 
-            @number = "納品完了"
+            @number = ["納品完了", "取引終了"]
         when 7 then 
-            @number = "受領依頼"
+            @number = ["受領申請","請求申請","領収申請", "取引終了"]
         when 8 then 
-            @number = "受領完了"
+            @number = ["受領完了", "取引終了"]
         when 9 then 
-            @number = "請求依頼"
+            @number = ["受領申請","請求申請","領収申請", "取引終了"]
         when 10 then 
-          @number = "支払完了"
+            @number = ["支払完了", "取引終了"]
         when 11 then 
-            @number = "領収依頼"
+            @number = ["受領申請","請求申請","領収申請", "取引終了"]
         when 12 then 
-          @number = "完了"
+            @number = ["領収完了", "取引終了"]
+        when 13 then 
+            @number = ["受領申請","請求申請","領収申請","完了"]
         end
       end
 
@@ -491,6 +632,8 @@ class OrdersController < ApplicationController
           order_up.number = 1
         when "見積依頼" then 
           order_up.number = 2
+        when "見積依頼（差し戻し）" then 
+          order_up.number = 2
         when "見積完了" then 
           order_up.number = 3
         when "発注依頼" then 
@@ -499,18 +642,32 @@ class OrdersController < ApplicationController
           order_up.number = 5
         when "納品完了" then 
           order_up.number = 6
-        when "受領依頼" then 
+        when "受領申請" then 
           order_up.number = 7
         when "受領完了" then 
           order_up.number = 8
-        when "請求依頼" then 
+        when "請求申請" then 
           order_up.number = 9
         when "支払完了" then 
           order_up.number = 10
-        when "領収依頼" then 
+        when "領収申請" then 
           order_up.number = 11
-        when "完了" then 
+        when "領収完了" then 
           order_up.number = 12
+        when "完了" then 
+          order_up.number = 13
+        when "取引終了" then 
+          order_up.number = 13
+        end
+      end
+
+      def order_required
+        unless @current_user.id == @order.user_id or @current_user.id == @order.receive_user_id
+          redirect_to mypage_users_path, notice: '受発注画面に遷移できませんでした'
+        end
+
+        if @current_user.id == @order.receive_user_id && @order.number < 2
+          redirect_to mypage_users_path, notice: '受発注画面に遷移できませんでした'
         end
       end
 
@@ -521,5 +678,13 @@ class OrdersController < ApplicationController
       def order_params
         params.require(:order).permit(:ord_limit, :condition)
       end
-      
+
+      def comment_create(number)
+        Comment.create!(
+          user_name: @current_job.name,
+          content: "受発注データを更新しました。" + "\n進捗状況：" + number + "\n更新者：" + @current_job.name + "\n更新時間：" + DateTime.now.strftime('%Y年%m月%d日%H時%M分'),
+          order_id: @order.id,
+          user_id: @current_user.id
+        )
+      end
 end

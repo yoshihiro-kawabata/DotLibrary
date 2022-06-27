@@ -22,11 +22,21 @@
     </tr>
   </thead>
   <tbody>
+
     <% @orders.each do |order| %>
       <tr>
         <td style="border:2px solid"><%= order.user_name %></td>
         <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 400px; "><%= order.title %></td>
-        <td style="border:2px solid"><%= order.receive_user_name %></td>
+        <td style="border:2px solid">
+        <% order.number += 1 %>
+        <% if order.user_id == @current_user.id && order.number.in?([3,5,7,9,11,13]) %>
+          <%= order.receive_user_name %>
+        <% elsif order.receive_user_id == @current_user.id && order.number.in?([1,2,4,6,8,10,12]) %>
+          <%= order.receive_user_name %>
+        <% else %>
+          <font color=red><%= order.receive_user_name %></font>
+        <% end %>
+        </td>
         <td style="border:2px solid"><%= link_to '確認', talk_orders_path(order_id: order.id) %></td>
       </tr>
     <% end %>

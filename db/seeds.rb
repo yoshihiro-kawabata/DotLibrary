@@ -258,7 +258,7 @@ Order.create!(
     user_name: "テスト図書館#{n}",
     receive_user_id: "#{n + 8}",
     receive_user_name: "テスト書店#{n}",
-    number: 12,
+    number: 13,
     complete_flg: true,
     ord_limit: "テスト日末日",
     condition: "月末払い",

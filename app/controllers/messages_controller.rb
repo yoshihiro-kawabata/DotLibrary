@@ -1,6 +1,10 @@
 class MessagesController < ApplicationController
     before_action :set_message, only: [:show, :destroy]
     before_action :login_required
+    skip_before_action :library_required
+    skip_before_action :store_required
+    skip_before_action :provider_required
+
 
     def index
         @messages = Message.where(user_id: @current_user.id).order("created_at DESC").page params[:page]        

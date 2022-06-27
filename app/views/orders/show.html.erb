@@ -41,7 +41,7 @@
           <% @details.each do |detail| %>
           <tr>
             <td style="border:2px solid"><%= detail.name %></td>
-            <td style="border:2px solid"><%= detail.quantity %></td>
+            <td style="border:2px solid"><% if detail.quantity == 0 %>---<% else %><%= detail.quantity %><% end %></td>
             <td style="border:2px solid"><%= detail.price %></td>
             <td style="border:2px solid"><%= detail.remark %></td>
           </tr>

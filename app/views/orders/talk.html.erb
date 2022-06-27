@@ -22,12 +22,12 @@
 
     <% @talks.each do |comment| %>
       <tr>
-        <td style="text-align:right;"><%= comment_count %>：</td>
-        <td style="width:600px;"><%= comment.user_name %>　<%= comment.created_at.strftime('%Y年%m月%d日 %H:%M:%S') %></td>
+        <td style="text-align:right;"><font color=blue><%= comment_count %>：</font></td>
+        <td style="width:600px;"><font color=blue><%= comment.user_name %>　<%= comment.created_at.strftime('%Y年%m月%d日 %H:%M:%S') %></font></td>
       </tr>
       <tr>
         <td></td>
-        <td style="width:600px;"><div class="boxA"><%= comment.content %></div></td>
+        <td style="width:600px;"><div class="boxA"><%= html_newline(comment.content) %></div></td>
       </tr>
           <% comment_count += 1 %>
     <% end %>

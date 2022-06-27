@@ -112,14 +112,11 @@
   <div class="col-sm-12 col-lg-6">
     <div class="d-flex flex-wrap">
       <div class="col-sm-12 col-lg-12">
-        <%= f.label :現在使用している画像： %>
-      </div>
-      <div class="col-sm-12 col-lg-12">
         <div class="d-flex flex-wrap">
           <% if @book.images.attached? %>
             <% @book.images.each do |image| %>
                 <div class="col-sm-12 col-lg-5">
-                    <%= image_tag image.variant(resize_to_limit: [250, 250]) %><br>
+                    <%= image_tag image.variant(resize: "200x200!") %>
                     <%= f.check_box :image_ids, { multiple: true }, image.id, false %>
                     👆この画像を削除する
                 </div>
