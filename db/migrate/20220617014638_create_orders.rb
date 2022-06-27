@@ -10,7 +10,7 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.boolean :complete_flg, null: false, default: false
       t.text :ord_limit
       t.text :condition
-      t.integer :price
+      t.bigint :price
 
       t.timestamps
     end

@@ -26,40 +26,39 @@
         <%= f.label :書籍名： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.text_field :name, :size => 32, :placeholder => "30文字以内" %>
+      <%= f.text_field :name, :size => 32, :maxlength => 30, :placeholder => "書籍名" %>
     </div>
     <div class="col-sm-12 col-lg-4">
         <%= f.label :書籍番号： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.text_field :number, :size => 32, :placeholder => "30文字以内" %>
+      <%= f.text_field :number, :size => 32, :maxlength => 7, :placeholder => "書籍番号" %>
     </div>
-
     <div class="col-sm-12 col-lg-4">
         <%= f.label :キーワード： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :keyword1, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :keyword1, :size => 32, :maxlength => 30, :placeholder => "例：著者名" %>
     </div>
     <div class="col-sm-12 col-lg-4">
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :keyword2, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :keyword2, :size => 32, :maxlength => 30, :placeholder => "例：出版社名、出版年月" %>
     </div>
     <div class="col-sm-12 col-lg-4">
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :keyword3, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :keyword3, :size => 32, :maxlength => 30, :placeholder => "キーワードその3" %>
     </div>
     <div class="col-sm-12 col-lg-4">
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :keyword4, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :keyword4, :size => 32, :maxlength => 30, :placeholder => "キーワードその4" %>
     </div>
     <div class="col-sm-12 col-lg-4">
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :keyword5, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :keyword5, :size => 32, :maxlength => 30, :placeholder => "キーワードその5" %>
     </div>
 
     <% case @c_job.authority_id when 2 then %>
@@ -67,21 +66,21 @@
         <%= f.label :在庫数： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :quantity, :size => 32, :maxlength => 7, :placeholder => "30文字以内" %>
+        <%= f.text_field :quantity, :size => 32, :maxlength => 7, :placeholder => "在庫数" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
         <%= f.label :値段： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :price, :size => 32, :maxlength => 7, :placeholder => "30文字以内" %>
+        <%= f.text_field :price, :size => 32, :maxlength => 7, :placeholder => "値段" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
         <%= f.label :納期： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :limit, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :limit, :size => 32, :maxlength => 30, :placeholder => "納期" %>
     </div>
 
     <% when 3 then %>
@@ -89,7 +88,7 @@
         <%= f.label :在庫数： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :quantity, :size => 32, :maxlength => 7, :placeholder => "30文字以内" %>
+        <%= f.text_field :quantity, :size => 32, :maxlength => 7, :placeholder => "在庫数" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">

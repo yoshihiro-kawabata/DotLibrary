@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
   create_table "books_providers", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "book_id", null: false
-    t.integer "quantity", null: false
+    t.bigint "quantity", null: false
     t.boolean "hand_flg", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
   create_table "books_stores", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "book_id", null: false
-    t.integer "quantity", null: false
-    t.integer "price", null: false
+    t.bigint "quantity", null: false
+    t.bigint "price", null: false
     t.text "limit", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
 
   create_table "details", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "quantity"
-    t.integer "price"
+    t.bigint "quantity"
+    t.bigint "price"
     t.text "remark"
     t.bigint "order_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 2022_06_17_065126) do
     t.boolean "complete_flg", default: false, null: false
     t.text "ord_limit"
     t.text "condition"
-    t.integer "price"
+    t.bigint "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"

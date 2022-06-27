@@ -3,8 +3,8 @@ class CreateBooksStores < ActiveRecord::Migration[6.0]
     create_table :books_stores do |t|
       t.references :store, null: false, foreign_key: true
       t.references :book, null: false, foreign_key: true
-      t.integer :quantity, null: false
-      t.integer :price, null: false
+      t.bigint :quantity, null: false
+      t.bigint :price, null: false
       t.text :limit, null: false
 
       t.timestamps
