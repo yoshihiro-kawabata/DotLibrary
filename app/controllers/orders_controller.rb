@@ -477,7 +477,7 @@ class OrdersController < ApplicationController
             @Bosto.each do |bost|
               bookA = Book.find(bost.book_id)
               alBos = []
-              if bookA.present?
+              if bookA.present? && bost.quantity > 0
                 alBos << bookA.id
                 alBos << bookA.name
                 alBos << bost.quantity
@@ -493,7 +493,7 @@ class OrdersController < ApplicationController
             @Bopro.each do |bopr|
               bookA = Book.find(bopr.book_id)
               alPro = []
-              if bookA.present?
+              if bookA.present? && bopr.quantity > 0
                 alPro << bookA.id
                 alPro << bookA.name
                 alPro << bopr.quantity

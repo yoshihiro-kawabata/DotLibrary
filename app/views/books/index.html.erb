@@ -40,7 +40,7 @@
       <tr>
         <td style="border:2px solid"><%= @books[n][0] %></td>
         <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 500px; "><%= @books[n][1] %>　<%= @books[n][2] %>　<%= @books[n][3] %>　<%= @books[n][4] %>　<%= @books[n][5] %></td>
-        <td style="border:2px solid"><%= @books[n][6] %></td>
+        <td style="border:2px solid"><% if @books[n][6] == 0 %>在庫なし<% else %><%= @books[n][6] %><% end %></td>
         <td style="border:2px solid"><%= @books[n][7] %></td>
         <td style="border:2px solid"><% case @books[n][8] when true then %>譲渡可能<% when false then %>貸借のみ<% else %><%= @books[n][8] %><% end %></td>
         <td style="border:2px solid"><%= link_to '確認', book_path(@books[n][9]) %></td>

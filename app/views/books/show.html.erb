@@ -48,7 +48,7 @@
             在庫数：
         </div>
         <div class="col-sm-12 col-lg-8">
-          <%= @sub_book.quantity %>
+          <% if @sub_book.quantity == 0 %>在庫なし<% else %><%= @sub_book.quantity %><% end %>
         </div>
         <div class="col-sm-12 col-lg-4">
             値段：
@@ -67,7 +67,7 @@
             在庫数：
         </div>
         <div class="col-sm-12 col-lg-8">
-          <%= @sub_book.quantity %>
+          <% if @sub_book.quantity == 0 %>在庫なし<% else %><%= @sub_book.quantity %><% end %>
         </div>
         <div class="col-sm-12 col-lg-4">
             譲渡貸借：
