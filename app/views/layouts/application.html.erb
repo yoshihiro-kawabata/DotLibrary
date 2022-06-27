@@ -29,11 +29,11 @@
   <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
   <li class="has-child"><a>アカウント</a>
     <ul>
-    <li><%= link_to "マイページ", mypage_users_path %></li>
-    <li><%= link_to "登録者確認", users_path %></li>
-    <li><%= link_to "アカウント登録", new_user_path %></li>
-    <li><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
-    <li><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
+    <li class="has-child"><%= link_to "マイページ", mypage_users_path %></li>
+    <li class="has-child"><%= link_to "登録者確認", users_path %></li>
+    <li class="has-child"><%= link_to "アカウント登録", new_user_path %></li>
+    <li class="has-child"><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
+    <li class="has-child"><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
     </ul>
   </li>
     <% when 2 then %>
@@ -52,9 +52,9 @@
   <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
   <li class="has-child"><a>アカウント</a>
     <ul>
-    <li><%= link_to "マイページ", mypage_users_path %></li>
-    <li><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
-    <li><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
+    <li class="has-child"><%= link_to "マイページ", mypage_users_path %></li>
+    <li class="has-child"><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
+    <li class="has-child"><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
     </ul>
   </li>
 
@@ -76,9 +76,9 @@
   <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
   <li class="has-child"><a>アカウント</a>
     <ul>
-    <li><%= link_to "マイページ", mypage_users_path %></li>
-    <li><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
-    <li><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
+    <li class="has-child"><%= link_to "マイページ", mypage_users_path %></li>
+    <li class="has-child"><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
+    <li class="has-child"><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
     </ul>
   </li>
   <% end %>

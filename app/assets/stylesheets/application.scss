@@ -42,7 +42,7 @@ body{
     display: block;
     text-decoration: none;
     color:#fff;
-    padding:20px 45px;
+    padding:20px 50px;
     transition:all .3s;
   }
   
@@ -62,20 +62,20 @@ body{
     width:6px;
     height:6px;
     border-top: 2px solid #999;
-      border-right:2px solid #999;
-      transform: rotate(135deg);
+    border-right:2px solid #999;
+    transform: rotate(135deg);
   }
   
   nav ul ul li.has-child::before{
     content:'';
     position: absolute;
-    left:6px;
+    left:-20px;
     top:17px;
     width:6px;
     height:6px;
-      border-top: 2px solid #fff;
-      border-right:2px solid #fff;
-      transform: rotate(45deg);
+    border-top: 2px solid #fff;
+    border-right:2px solid #fff;
+    transform: rotate(45deg);
   }
   
   nav li.has-child ul{
@@ -84,7 +84,7 @@ body{
     top:64px;
     z-index: 4;
     background:#28BFE7;
-    width:140px;
+    width:180px;
     visibility: hidden;
     opacity: 0;
     transition: all .3s;
