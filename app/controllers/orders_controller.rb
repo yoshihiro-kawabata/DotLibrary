@@ -280,7 +280,12 @@ class OrdersController < ApplicationController
           @use_auth = UsersAuthority.find_by(user_id: @order.user_id)
           @user = Library.find_by(user_id: @order.user_id)
         end
+
+        if params[:action] == "show"
+          select_time_index(@order)
+        else
           select_time(@order)
+        end
       end
 
       def set_search

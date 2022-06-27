@@ -2,7 +2,7 @@ class UsersController < ApplicationController
     before_action :login_required
     before_action :set_user,  only: [:show, :edit, :update, :destroy]
     before_action :set_sub_user,  only: [:show, :edit, :update]
-    before_action :correct_user, only: [:new, :edit, :show]
+    before_action :correct_user, only: [:edit, :update]
   
       def index
         @users = User.all
@@ -171,7 +171,7 @@ class UsersController < ApplicationController
       end
 
       def correct_user
-        redirect_to mypage_users_path unless current_user?(@user)
+        redirect_to mypage_users_path, notice: '他のユーザにはアクセスできません' unless current_user?(@user)
       end
   
   end
