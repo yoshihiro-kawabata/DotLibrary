@@ -15,6 +15,20 @@
   </div>
   <% end %>
 
+<% unless @books.present? %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-4">
+      受発注相手：
+    </div>
+    <div class="col-sm-12 col-lg-8">
+      <%= @sub_user.name %>
+    </div>
+    <div class="col-sm-12 col-lg-12">
+      <h2 style="margin: 20px;">取引できる書籍はありません。</h2>
+    </div>
+  </div>
+<% else %>
+
 <%= form_with(model: @order, url: make_orders_path, local: true) do |f| %>
   <%= f.hidden_field :user_id, :value => @userA.id %>
   <div class="d-flex flex-wrap">
@@ -69,5 +83,6 @@
       <h4 style="margin-top: 5px;"><%= f.submit "選択", class: "btn btn-primary"  %></h4>
     </div>
   </div>
+  <% end %>
 <% end %>
 </div>

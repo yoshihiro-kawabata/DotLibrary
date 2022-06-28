@@ -79,14 +79,14 @@
                 <% when 3 then %>
                   <% if @books[n][3] == true %> 
               <td style="border:2px solid">
-                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :placeholder => "例：譲渡希望、貸借希望" %>
+                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :maxlength => 30, :placeholder => "例：譲渡希望、貸借希望" %>
               </td>
               <td style="border:2px solid">
                       譲渡可能
               </td>
                   <% else %>
               <td style="border:2px solid">
-                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :placeholder => "例：貸借希望" %>
+                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :maxlength => 30, :placeholder => "例：貸借希望" %>
               </td>
               <td style="border:2px solid">
                       貸借のみ
@@ -102,14 +102,14 @@
         <%= f.label :希望納期： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :ord_limit, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :ord_limit, :size => 32, :maxlength => 30, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
         <%= f.label :希望支払条件： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :condition, :size => 32, :placeholder => "30文字以内" %>
+        <%= f.text_field :condition, :size => 32, :maxlength => 30, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">

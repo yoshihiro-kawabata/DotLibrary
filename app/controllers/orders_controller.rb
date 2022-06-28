@@ -29,9 +29,25 @@ class OrdersController < ApplicationController
       def history
         case @c_job.authority_id 
         when 1 then #図書館
-          @orders = Order.where(user_id: @current_user.id, complete_flg: true).order("updated_at DESC")
+          @orders = Order.where(user_id: @current_user.id, complete_flg: true).order("updated_at DESC")        
+          @orders.each do |order|
+            talks = Comment.where(order_id: order.id).order("created_at ASC")
+            if talks.present? && talks.last.created_at > order.updated_at
+              order.receive_user_id = 1
+            else
+              order.receive_user_id = 0
+            end
+          end
         else
           @orders = Order.where(receive_user_id: @current_user.id, complete_flg: true).order("updated_at DESC")
+          @orders.each do |order|
+            talks = Comment.where(order_id: order.id).order("created_at ASC")
+            if talks.present? && talks.last.created_at > order.updated_at
+              order.receive_user_id = 1
+            else
+              order.receive_user_id = 0
+            end
+          end
         end
       end
 
@@ -41,7 +57,7 @@ class OrdersController < ApplicationController
         @talks = Comment.where(order_id: @order.id).order("created_at ASC")
         order_required
 
-        if @order.complete_flg? && @talks.last.created_at > @order.updated_at
+        if @talks.present? && @order.complete_flg? && @talks.last.created_at > @order.updated_at
           @order.update(created_at: DateTime.current)
         end
       end

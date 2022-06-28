@@ -97,10 +97,10 @@
 
     <% if @order.number == 3 %>
         <div class="col-sm-12 col-lg-6">
-            納期更新：<%= f.text_field :ord_limit, :size => 32, :placeholder => "30文字以内" %>
+            納期更新：<%= f.text_field :ord_limit, :size => 32, :maxlength => 30, :placeholder => "30文字以内" %>
         </div>
         <div class="col-sm-12 col-lg-6">
-            支払い条件：<%= f.text_field :condition, :size => 32, :placeholder => "30文字以内" %>
+            支払い条件：<%= f.text_field :condition, :size => 32, :maxlength => 30, :placeholder => "30文字以内" %>
         </div>
         <div class="col-sm-12 col-lg-6">
             進捗状況：<%= f.select(:number, @number) %>

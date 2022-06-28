@@ -1,14 +1,14 @@
 class UsersController < ApplicationController
     before_action :login_required
     skip_before_action :library_required
-    before_action :store_required,  only: [:new, :create]
-    before_action :provider_required,  only: [:new, :create]
+    before_action :store_required,  only: [:index, :new, :create]
+    before_action :provider_required,  only: [:index, :new, :create]
     before_action :set_user,  only: [:show, :edit, :update, :destroy]
     before_action :set_sub_user,  only: [:show, :edit, :update]
     before_action :correct_user, only: [:edit, :update]
   
       def index
-        @users = User.all
+        @users = User.all.order("id ASC")
 
         @sub_users = []
         @users.each do |user|

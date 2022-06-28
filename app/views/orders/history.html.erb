@@ -11,13 +11,14 @@
     <tr>
       <th style="width:150px;">完了日付</th>
       <th style="width:200px;">
-      <% if @c_job.authority_id == 1 %>
+      <% unless @c_job.authority_id == 1 %>
         発注先
       <% else %>
         受注元
       <% end %>      
       </th>
       <th style="width:500px;">タイトル</th>
+      <th style="width:50px;">完了確認</th>
       <th style="width:50px;">確認</th>
     </tr>
   </thead>
@@ -25,8 +26,21 @@
     <% @orders.each do |order| %>
       <tr>
         <td style="border:2px solid"><%= order.updated_at.strftime('%Y年%m月%d日') %></td>
-        <td style="border:2px solid"><%= order.user_name %></td>
+        <td style="border:2px solid">
+          <% unless @c_job.authority_id == 1 %>
+            <%= order.user_name %>
+          <% else %>
+            <%= order.receive_user_name %>
+          <% end %>      
+        </td>
         <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 400px; "><%= order.title %></td>
+        <td style="border:2px solid">
+          <% if order.receive_user_id == 1  %>
+            未確認
+          <% else %>
+            確認済
+          <% end %>      
+        </td>        
         <td style="border:2px solid"><%= link_to '確認', talk_orders_path(order_id: order.id) %></td>
       </tr>
     <% end %>

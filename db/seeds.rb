@@ -253,25 +253,27 @@ Order.create!(
 
   4.times do |n|
   Order.create!(
-    title: "【完了】テスト図書館#{n}_test",
-    user_id: "#{n + 4}",
-    user_name: "テスト図書館#{n}",
+    title: "【完了】master図書館_test",
+    user_id: "1",
+    user_name: "master図書館",
     receive_user_id: "#{n + 8}",
     receive_user_name: "テスト書店#{n}",
     number: 13,
     complete_flg: true,
     ord_limit: "テスト日末日",
     condition: "月末払い",
-    price: (n + 2) * 3000 
+    price: (n + 2) * 3000,
+    created_at: DateTime.current.ago(1.days),
+    updated_at: DateTime.current
   )
   end
 
   4.times do |n|
   Comment.create!(
-    user_name: "テスト図書館#{n}",
+    user_name: "master図書館",
     content: "テストコメント#{n}です",
     order_id: "#{n + 1}",
-    user_id: "#{n + 4}"
+    user_id: 1
   )
   end
   
@@ -288,7 +290,7 @@ Order.create!(
     Detail.create!(
       name: "test#{n + 2}",
       quantity: "#{n + 2}",
-      price: (n + 2) * 500,
+      price: 500,
       remark: "---",
       order_id: "#{n + 1}"
     )

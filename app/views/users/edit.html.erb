@@ -52,7 +52,7 @@
         <%= f.label :名前： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :name, :size => 32,:value => @sub_user.name, :placeholder => "30文字以内" %>
+        <%= f.text_field :name, :size => 32, :maxlength => 30,:value => @sub_user.name, :placeholder => "名前" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
@@ -71,14 +71,14 @@
         <%= f.label :利用番号： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :sub_number, :size => 32,:value => @sub_user.sub_number, :placeholder => "30文字以内" %>
+        <%= f.text_field :sub_number, :size => 32, :maxlength => 7,:value => @sub_user.sub_number, :placeholder => "利用番号" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
         <%= f.label :電話番号： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :phone, :size => 32,:value => @sub_user.phone, :placeholder => "30文字以内" %>
+        <%= f.text_field :phone, :size => 32, :maxlength => 20,:value => @sub_user.phone, :placeholder => "20文字以内" %>
     </div>
 
 <% if @use_auth.authority_id == 2 %>
@@ -86,14 +86,14 @@
         <%= f.label :FAX： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :fax, :size => 32,:value => @sub_user.fax, :placeholder => "30文字以内" %>
+        <%= f.text_field :fax, :size => 32, :maxlength => 30,:value => @sub_user.fax, :placeholder => "30文字以内" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
         <%= f.label :担当者： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-        <%= f.text_field :manager, :size => 32,:value => @sub_user.manager, :placeholder => "30文字以内" %>
+        <%= f.text_field :manager, :size => 32, :maxlength => 30,:value => @sub_user.manager, :placeholder => "30文字以内" %>
     </div>
 <% end %>
 
@@ -101,7 +101,7 @@
       <%= f.label :メールアドレス： %>
     </div>
     <div class="col-sm-12 col-lg-8">
-      <%= f.email_field :email, :size => 32,:value => @sub_user.email %>
+      <%= f.email_field :email, :size => 32,:value => @sub_user.email, :placeholder => "メールアドレス" %>
     </div>
 
     <div class="col-sm-12 col-lg-4">
