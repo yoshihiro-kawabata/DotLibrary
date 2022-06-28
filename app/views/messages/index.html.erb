@@ -47,7 +47,7 @@
           <% end %>
           </td>
           <td style="border:2px solid"><%= link_to '確認', message_path(message.id) %></td>
-          <td style="border:2px solid"><%= link_to '削除', message, method: :delete, data: { confirm: "受信メッセージを削除します。\n削除したメッセージは相手からも見えなくなります。\n既読であることを確認してください。" } %></td>
+          <td style="border:2px solid"><%= link_to '削除', message, method: :delete, data: { confirm: "メッセージを削除します。\n既読であることを確認してください。" } %></td>
         </tr>
       <% end %>
     </tbody>

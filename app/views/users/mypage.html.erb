@@ -5,12 +5,12 @@
     <% if @orders_count == 0 %>
         受発注連絡の更新はありません。
     <% else %>
-        確認が必要な受発注連絡が<%= @orders_count %>件あります。
+        確認が必要な受発注状況が<%= @orders_count %>件あります。
     <% end %>
     </div>
     <div class="col-sm-12 col-lg-12">
     <% if @end_orders_count > 0 %>
-        完了した受発注連絡が<%= @end_orders_count %>件あります。
+        未確認の受発注履歴が<%= @end_orders_count %>件あります。
     <% end %>
     </div>
     <div class="col-sm-12 col-lg-12">

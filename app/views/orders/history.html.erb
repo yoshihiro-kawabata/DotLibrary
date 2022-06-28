@@ -36,7 +36,7 @@
         <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 400px; "><%= order.title %></td>
         <td style="border:2px solid">
           <% if order.receive_user_id == 1  %>
-            未確認
+            <font color=red>未確認</font>
           <% else %>
             確認済
           <% end %>      
