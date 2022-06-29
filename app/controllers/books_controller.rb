@@ -230,14 +230,16 @@ class BooksController < ApplicationController
         render :edit
       else
         err_count = 0
-        params[:book][:images].each do |image|
-          unless File.extname(image.original_filename.to_s.downcase).in?(['.gif', '.png', '.jpg', '.jpeg'])
-            err_count += 1
+        if params[:book][:images].present?
+          params[:book][:images].each do |image|
+            unless File.extname(image.original_filename.to_s.downcase).in?(['.jpg', '.jpeg'])
+              err_count += 1
+            end
           end
         end
         if err_count > 0
           flash[:notice] = '書籍情報を更新出来ませんでした'
-          @book.errors.add(:images, "はgit,png,jpg,jpegのみ登録できます")
+          @book.errors.add(:images, "はjpg,jpegのみ登録できます")
           render :edit
         else
           if @book.valid? && @sub_book.valid?

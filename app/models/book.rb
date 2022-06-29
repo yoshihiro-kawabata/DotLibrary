@@ -10,7 +10,7 @@ class Book < ApplicationRecord
 
 
     validates :images,
-    content_type: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
+    content_type: ['image/jpg', 'image/jpeg'],
     size: { less_than_or_equal_to: 5.megabytes },              # ファイルサイズ
     dimension: { width: { max: 2000 }, height: { max: 2000 } } # 画像の大きさ
 
@@ -26,12 +26,12 @@ class Book < ApplicationRecord
     def images_content
       err_count = 0
       images.each do |image|
-        unless File.extname(image.filename.to_s.downcase).in?(['.gif', '.png', '.jpg', '.jpeg'])
+        unless File.extname(image.filename.to_s.downcase).in?(['.jpg', '.jpeg'])
           err_count += 1
         end
       end
       if err_count > 0
-        errors.add(:images, "はgit,png,jpg,jpegのみ登録できます")
+        errors.add(:images, "にはjpg,jpegのみ登録できます")
       end
     end
 
