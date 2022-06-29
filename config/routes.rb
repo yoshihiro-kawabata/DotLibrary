@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'sessions#new'
+  root 'users#mypage'
 
   resources :sessions, only: [:new, :create, :destroy]
 

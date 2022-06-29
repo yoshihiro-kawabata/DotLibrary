@@ -5,6 +5,10 @@ class SessionsController < ApplicationController
   skip_before_action :provider_required
 
   def new
+    if current_user.present?
+      redirect_to  mypage_users_path
+      flash[:notice] = 'まだログインしています'
+    end        
   end
 
   def create

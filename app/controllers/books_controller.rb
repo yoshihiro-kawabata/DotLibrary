@@ -229,48 +229,60 @@ class BooksController < ApplicationController
         @book.errors.add(:images, "の削除、追加の操作は同時に行えません")
         render :edit
       else
-        if @book.valid? && @sub_book.valid?
-        
-          if params[:book][:images].present? && params[:book][:images].count > 4            
-            flash[:notice] = '書籍情報を更新出来ませんでした'
-            @book.errors.add(:add_images, "は4枚以内にしてください")
-            render :edit
-          else
-            # 画像の削除処理
-            params[:book][:image_ids]&.each do |image_id|
-              @book.images.find(image_id).purge
-            end
-
-            if @book.update(book_params)
-
-              case @c_job.authority_id
-                when 2 then #書店
-                  @sub_book.update(store_params)
-                when 3 then #個人提供者
-                  @sub_book.update(provider_params)
-              end
-
-              libraries = Library.all
-              libraries.each do |library|
-                Message.create!(
-                  content: "書籍データを更新しました。\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
-                  create_name: @current_job.name,
-                  create_id: @current_user.id,
-                  user_name: library.name,
-                  user_id: library.user_id
-                )  
-              end
-      
-                redirect_to book_path(@book.id)
-                flash[:notice] = '書籍情報を更新しました'
-            else
-              flash[:notice] = '書籍情報を更新出来ませんでした'
-              render :edit
-            end
+        err_count = 0
+        params[:book][:images].each do |image|
+          unless File.extname(image.original_filename.to_s.downcase).in?(['.gif', '.png', '.jpg', '.jpeg'])
+            err_count += 1
           end
-        else
+        end
+        if err_count > 0
           flash[:notice] = '書籍情報を更新出来ませんでした'
+          @book.errors.add(:images, "はgit,png,jpg,jpegのみ登録できます")
           render :edit
+        else
+          if @book.valid? && @sub_book.valid?
+        
+            if params[:book][:images].present? && params[:book][:images].count > 4            
+              flash[:notice] = '書籍情報を更新出来ませんでした'
+              @book.errors.add(:add_images, "は4枚以内にしてください")
+              render :edit
+            else
+              # 画像の削除処理
+              params[:book][:image_ids]&.each do |image_id|
+                @book.images.find(image_id).purge
+              end
+
+              if @book.update(book_params)
+
+                case @c_job.authority_id
+                  when 2 then #書店
+                    @sub_book.update(store_params)
+                  when 3 then #個人提供者
+                    @sub_book.update(provider_params)
+                end
+
+                libraries = Library.all
+                libraries.each do |library|
+                  Message.create!(
+                    content: "書籍データを更新しました。\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
+                    create_name: @current_job.name,
+                    create_id: @current_user.id,
+                    user_name: library.name,
+                    user_id: library.user_id
+                  )  
+                end
+      
+                  redirect_to book_path(@book.id)
+                  flash[:notice] = '書籍情報を更新しました'
+              else
+                flash[:notice] = '書籍情報を更新出来ませんでした'
+                render :edit
+              end
+            end
+          else
+            flash[:notice] = '書籍情報を更新出来ませんでした'
+            render :edit
+          end
         end
       end
     end

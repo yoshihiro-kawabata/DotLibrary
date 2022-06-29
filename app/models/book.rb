@@ -10,16 +10,28 @@ class Book < ApplicationRecord
 
 
     validates :images,
-    content_type: %i(gif png jpg jpeg),                        # 画像の種類
     size: { less_than_or_equal_to: 5.megabytes },              # ファイルサイズ
     dimension: { width: { max: 2000 }, height: { max: 2000 } } # 画像の大きさ
 
     validate :images_length
+    validate :images_content
 
     def images_length
         if images.length > 4
           errors.add(:images, "は4枚以内にしてください")
         end
       end
+
+    def images_content
+      err_count = 0
+      images.each do |image|
+        unless File.extname(image.filename.to_s.downcase).in?(['.gif', '.png', '.jpg', '.jpeg'])
+          err_count += 1
+        end
+      end
+      if err_count > 0
+        errors.add(:images, "はgit,png,jpg,jpegのみ登録できます")
+      end
+    end
 
 end
