@@ -95,7 +95,11 @@
         <% if @book.images.attached? %>
             <% @book.images.each do |image| %>
                 <div class="col-sm-12 col-lg-5">
+                  <% if Rails.env.production? %>
+                    <%= cl_image_tag(image.blob.key) %>
+                  <% else %>
                     <%= image_tag image.variant(resize: "200x200!") %>
+                  <% end %>
                 </div>
                 <div class="col-sm-12 col-lg-1">
                 </div>
@@ -105,3 +109,4 @@
     </div>
    </div>
 </div>
+
