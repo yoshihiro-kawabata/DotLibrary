@@ -25,7 +25,7 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
 
-gem 'cloudinary', require: true        
+gem 'cloudinary', require: false        
 gem 'activestorage-cloudinary-service' 
 gem 'active_storage_validations'
 

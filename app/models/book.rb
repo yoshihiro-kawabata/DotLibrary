@@ -10,6 +10,7 @@ class Book < ApplicationRecord
 
 
     validates :images,
+    content_type: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
     size: { less_than_or_equal_to: 5.megabytes },              # ファイルサイズ
     dimension: { width: { max: 2000 }, height: { max: 2000 } } # 画像の大きさ
 
