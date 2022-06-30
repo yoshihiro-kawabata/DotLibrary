@@ -58,7 +58,7 @@ class MessagesController < ApplicationController
 
     def alldel
       @messages = Message.where(id: params[:mes]).delete_all
-      redirect_to messages_path, notice: '受信メッセージを削除しました'
+      redirect_to messages_path, notice: 'メッセージを削除しました'
     end  
 
     def allshow
