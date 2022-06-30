@@ -10,7 +10,7 @@ class BooksController < ApplicationController
         
     def index
       @books =[]
-      @sen = @q.result.order("id ASC")
+      @sen = @q.result.order("name ASC")
         @sen.each do |book|
           alBos = []
           case @c_job.authority_id 
@@ -62,7 +62,7 @@ class BooksController < ApplicationController
       
     def search
       @books =[]
-      @sen = @q.result.order("id ASC")
+      @sen = @q.result.order("name ASC")
         @sen.each do |book|
           alBos = []
           case @c_job.authority_id 
@@ -153,29 +153,54 @@ class BooksController < ApplicationController
 
       bookA = Book.first.id
       @sub_book.book_id = bookA
+      bookB = Book.where(name: @book.name)
+      err_count = 0
 
-      if @book.valid? && @sub_book.valid?
-
-        @book.save
-        @sub_book.book_id = @book.id
-        @sub_book.save
-
-        libraries = Library.all
-        libraries.each do |library|
-          Message.create!(
-            content: "書籍を追加しました！\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
-            create_name: @current_job.name,
-            create_id: @current_user.id,
-            user_name: library.name,
-            user_id: library.user_id
-          )  
+      if bookB.present?
+        case @c_job.authority_id 
+        when 2 then #書店
+          bookB.each do |book|
+            if  book.store_ids.count{ |x| x == @current_job.id } > 0
+              err_count += 1
+            end
+          end
+        when 3 then #提供者
+          bookB.each do |book|
+            if book.provider_ids.count{ |x| x == @current_job.id } > 0
+              err_count += 1
+            end
+          end 
         end
-        
-        redirect_to books_path
-        flash[:notice] = '書籍を登録しました'
+      end
+
+      if err_count > 0
+          @book.errors.add(@book.name, "は既に登録されています")
+          flash[:notice] = '書籍を登録出来ませんでした'
+          render :new
       else
-        flash[:notice] = '書籍を登録出来ませんでした'
-        render :new
+        if @book.valid? && @sub_book.valid?
+
+          @book.save
+          @sub_book.book_id = @book.id
+          @sub_book.save
+
+          libraries = Library.all
+          libraries.each do |library|
+            Message.create!(
+              content: "書籍を追加しました！\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
+              create_name: @current_job.name,
+              create_id: @current_user.id,
+              user_name: library.name,
+              user_id: library.user_id
+            )  
+          end
+        
+          redirect_to books_path
+          flash[:notice] = '書籍を登録しました'
+        else
+          flash[:notice] = '書籍を登録出来ませんでした'
+          render :new
+        end
       end
     end
 
@@ -237,9 +262,37 @@ class BooksController < ApplicationController
             end
           end
         end
+
+        if err_count > 0
+          @book.errors.add(:images, "はjpg,jpegのみ登録できます")
+        end
+
+        bookB = Book.where(name: @book.name).where.not(id: @book.id)
+        err_count = 0
+  
+        if bookB.present?
+          case @c_job.authority_id 
+          when 2 then #書店
+            bookB.each do |book|
+              if  book.store_ids.count{ |x| x == @current_job.id } > 0
+                err_count += 1
+              end
+            end
+          when 3 then #提供者
+            bookB.each do |book|
+              if book.provider_ids.count{ |x| x == @current_job.id } > 0
+                err_count += 1
+              end
+            end 
+          end
+        end
+
+        if err_count > 0
+          @book.errors.add(@book.name, "は既に登録されています")
+        end
+        
         if err_count > 0
           flash[:notice] = '書籍情報を更新出来ませんでした'
-          @book.errors.add(:images, "はjpg,jpegのみ登録できます")
           render :edit
         else
           if @book.valid? && @sub_book.valid?

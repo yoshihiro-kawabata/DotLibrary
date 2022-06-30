@@ -68,12 +68,12 @@ class OrdersController < ApplicationController
       def edit
         if @c_job.authority_id == 1
           if @order.number.in?([3,5,7,9,11,13])
-            flash[:notice] = '受注側の更新をお待ちください'
+            flash[:notice] = '発注先の更新をお待ちください'
             redirect_to order_path(@order.id)
           end
         else
           if @order.number.in?([1,2,4,6,8,10,12])
-            flash[:notice] = '発注側の更新をお待ちください'
+            flash[:notice] = '発注元の更新をお待ちください'
             redirect_to order_path(@order.id)
           end
         end
@@ -331,8 +331,11 @@ class OrdersController < ApplicationController
                 if bookA.present?
                   @detail_n = Detail.new
                   @detail_n.name = bookA.name
-                  if params[:order][:quantities][n].to_i > bosto.quantity
-                    @detail.errors.add(bookA.name, "：希望在庫数が既存在庫数を上回っています")
+                  if params[:order][:quantities][n].to_i < 1
+                    @detail.errors.add(bookA.name, "：希望数量は1以上在庫数以下で指定してください")
+                    @detail_n.quantity = 0
+                  elsif params[:order][:quantities][n].to_i > bosto.quantity
+                    @detail.errors.add(bookA.name, "：希望数量が既存在庫数を上回っています")
                     @detail_n.quantity = 0
                   else
                     @detail_n.quantity = params[:order][:quantities][n]
@@ -359,8 +362,11 @@ class OrdersController < ApplicationController
                 if bookA.present?
                   @detail_n = Detail.new
                   @detail_n.name = bookA.name
-                  if params[:order][:quantities][n].to_i > bopro.quantity
-                    @detail.errors.add(bookA.name, "：希望在庫数が既存在庫数を上回っています")
+                  if params[:order][:quantities][n].to_i < 1
+                    @detail.errors.add(bookA.name, "：希望数量は1以上在庫数以下で指定してください")
+                    @detail_n.quantity = 0
+                  elsif params[:order][:quantities][n].to_i > bopro.quantity
+                    @detail.errors.add(bookA.name, "：希望数量が既存在庫数を上回っています")
                     @detail_n.quantity = 0
                   else
                     @detail_n.quantity = params[:order][:quantities][n]
@@ -418,34 +424,40 @@ class OrdersController < ApplicationController
   
     private
       def set_order
-        @order = Order.find(params[:id])
-        @detail = Detail.new
-        @details = Detail.where(order_id:@order.id)
+        if params[:id] == "make"
+          flash[:notice] = '受発注検索画面に移動します'
+          redirect_to search_orders_path
+        else
 
-        if params[:action] == "edit" or params[:action] == "update"
-          @order.number += 1
-        end
+          @order = Order.find(params[:id])
+          @detail = Detail.new
+          @details = Detail.where(order_id:@order.id)
 
-        case @c_job.authority_id 
-        when 1 then #図書館
-          @use_auth = UsersAuthority.find_by(user_id: @order.receive_user_id)
-
-          case @use_auth.authority_id 
-            when 2 then #書店
-              @user = Store.find_by(user_id: @order.receive_user_id)
-            when 3 then #提供者
-              @user = Provider.find_by(user_id: @order.receive_user_id)
+          if params[:action] == "edit" or params[:action] == "update"
+            @order.number += 1
           end
 
-        else
-          @use_auth = UsersAuthority.find_by(user_id: @order.user_id)
-          @user = Library.find_by(user_id: @order.user_id)
-        end
+          case @c_job.authority_id 
+          when 1 then #図書館
+            @use_auth = UsersAuthority.find_by(user_id: @order.receive_user_id)
 
-        if params[:action] == "show"
-          select_time_index(@order)
-        else
-          select_time(@order)
+            case @use_auth.authority_id 
+              when 2 then #書店
+                @user = Store.find_by(user_id: @order.receive_user_id)
+              when 3 then #提供者
+                @user = Provider.find_by(user_id: @order.receive_user_id)
+            end
+
+          else
+            @use_auth = UsersAuthority.find_by(user_id: @order.user_id)
+            @user = Library.find_by(user_id: @order.user_id)
+          end
+
+          if params[:action] == "show"
+            select_time_index(@order)
+          else
+            select_time(@order)
+          end
         end
       end
 
@@ -544,6 +556,9 @@ class OrdersController < ApplicationController
 
       def set_make_unit
         @books =[]
+        books_name =[]
+        count_box =[]
+        name_count = 0
         @use_auth = UsersAuthority.find_by(user_id: @userA.id)
 
         case @use_auth.authority_id 
@@ -555,6 +570,7 @@ class OrdersController < ApplicationController
               alBos = []
               if bookA.present?
                 alBos << bookA.id
+                books_name << bookA.name
                 alBos << bookA.name
                 alBos << bosto.quantity
                 alBos << bosto.price
@@ -570,6 +586,7 @@ class OrdersController < ApplicationController
               alPro = []
               if bookA.present?
                 alPro << bookA.id
+                books_name << bookA.name
                 alPro << bookA.name
                 alPro << bopro.quantity
                 alPro << bopro.hand_flg
@@ -577,6 +594,18 @@ class OrdersController < ApplicationController
               end    
             end
         end
+
+        books_name.size.times do |n|
+          count_A = books_name.count{ |x| x == books_name[n] }
+          count_box << count_A
+        end
+
+        if count_box.max > 1
+          flash[:notice] = '同じ名前の書籍を発注することは出来ません'
+          set_choice
+          render :choice
+        end
+
       end
 
       def select_time_index(order)

@@ -320,3 +320,19 @@ Order.create!(
     )
 
   end
+
+10.times do |n|
+  book = Book.create!(      
+    name: "test#{n + 21}",
+    number: n + 21,
+    keyword1:"キーワード#{n + 21}"
+   )
+  
+  BooksStore.create!(
+    store_id: 1, 
+    book_id: n + 12, 
+    quantity:999999999,
+    price: 999999999,
+    limit: "2023年#{n + 1}月予定"
+  )
+  end

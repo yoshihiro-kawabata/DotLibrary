@@ -51,7 +51,7 @@
         <thead>
           <tr>
             <th style="border:2px solid; width:200px;">書籍名</th>
-            <th style="border:2px solid; width:250px;">希望受注数</th>
+            <th style="border:2px solid; width:250px;">希望数量</th>
             <th style="border:2px solid; width:100px;">在庫数</th>
             <% case @use_auth.authority_id %> 
             <% when 2 then %> 
@@ -69,7 +69,7 @@
                 <%= f.hidden_field :book_id, :value => @books[n][0] %>
                 <%= @books[n][1] %>
               </td>
-              <td style="border:2px solid"><%= f.text_field :quantities, :name => "order[quantities][]" ,:size => 20, :maxlength => 7, :placeholder => "在庫数以下で指定" %></td>
+              <td style="border:2px solid"><%= f.text_field :quantities, :name => "order[quantities][]" ,:size => 22, :maxlength => 7, :placeholder => "1以上在庫数以下で指定" %></td>
               <td style="border:2px solid"><%= @books[n][2] %></td>
                 <% case @use_auth.authority_id %> 
                 <% when 2 then %> 
@@ -120,7 +120,7 @@
     </div>
 
     <div class="col-sm-12 col-lg-4">
-      <h4 style="margin-top: 30px;"><%= f.submit "作成", class: "btn btn-primary"  %></h4>
+      <h4 style="margin-top: 30px;"><%= f.submit "作成", class: "btn btn-success"  %></h4>
     </div>
     <div class="col-sm-12 col-lg-6">
         <h4 style="margin-top: 30px;"><%= link_to t('common.back'), choice_orders_path(user_id: @userA.id) %></h4>
