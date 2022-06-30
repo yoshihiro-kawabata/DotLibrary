@@ -155,14 +155,23 @@ class BooksController < ApplicationController
       @sub_book.book_id = bookA
       err_count = 0
 
-      if @book.valid?
+      err_count = 0
+      if params[:book][:images].present?
+        params[:book][:images].each do |image|
+        if image.size > 5.megabytes
             err_count += 1
+          end
+          unless File.extname(image.original_filename.to_s.downcase).in?(['.jpg', '.jpeg'])
+            err_count += 1
+          end
+        end
       end
 
       if err_count > 0
-        @book.errors.add(:images, "はjpg,jpegのみ登録できます")
+        @book.errors.add(:images, "：画像情報に問題があります（ファイルサイズ：5MBまで、ファイル形式：jpg,jpegのみ）")
       end
 
+      err_count = 0
       bookB = Book.where(name: @book.name)
       if bookB.present?
         case @c_job.authority_id 
@@ -182,7 +191,10 @@ class BooksController < ApplicationController
       end
 
       if err_count > 0
-          @book.errors.add(@book.name, "は既に登録されています")
+        @book.errors.add(@book.name, "は既に登録されています")
+      end
+
+      if @book.errors.present?
           flash[:notice] = '書籍を登録出来ませんでした'
           render :new
       else
@@ -262,9 +274,13 @@ class BooksController < ApplicationController
         @book.errors.add(:images, "の削除、追加の操作は同時に行えません")
         render :edit
       else
+  
         err_count = 0
         if params[:book][:images].present?
           params[:book][:images].each do |image|
+            if image.size > 5.megabytes
+              err_count += 1
+            end
             unless File.extname(image.original_filename.to_s.downcase).in?(['.jpg', '.jpeg'])
               err_count += 1
             end
@@ -272,7 +288,7 @@ class BooksController < ApplicationController
         end
 
         if err_count > 0
-          @book.errors.add(:images, "はjpg,jpegのみ登録できます")
+          @book.errors.add(:images, "：画像情報に問題があります（ファイルサイズ：5MBまで、ファイル形式：jpg,jpegのみ）")
         end
 
         bookB = Book.where(name: @book.name).where.not(id: @book.id)
@@ -299,7 +315,7 @@ class BooksController < ApplicationController
           @book.errors.add(@book.name, "は既に登録されています")
         end
         
-        if err_count > 0
+        if @book.errors.present?
           flash[:notice] = '書籍情報を更新出来ませんでした'
           render :edit
         else

@@ -331,8 +331,8 @@ Order.create!(
   BooksStore.create!(
     store_id: 1, 
     book_id: n + 12, 
-    quantity:999999999,
-    price: 999999999,
+    quantity:9999999,
+    price: 9999999,
     limit: "2023年#{n + 1}月予定"
   )
   end
