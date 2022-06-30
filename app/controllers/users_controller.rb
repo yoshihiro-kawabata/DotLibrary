@@ -159,11 +159,55 @@ class UsersController < ApplicationController
             case params[:user][:authority]
               when "司書" then #司書
                 @sub_user.update(library_params)
+
+                @orders = Order.where(user_id: @user.id)
+                if @orders.present?
+                  @orders.each do |order|
+                    order.update(user_name: @sub_user.name)
+                  end
+                end
+
               when "書店" then #書店
                 @sub_user.update(store_params)
-              when "個人提供者" then #個人提供者
+
+                @orders = Order.where(receive_user_id: @user.id)
+                if @orders.present?
+                    @orders.each do |order|
+                    order.update(receive_user_name: @sub_user.name)
+                  end
+                end
+            when "個人提供者" then #個人提供者
                 @sub_user.update(provider_params)
+
+                @orders = Order.where(receive_user_id: @user.id)
+                if @orders.present?
+                    @orders.each do |order|
+                    order.update(receive_user_name: @sub_user.name)
+                  end
+                end
             end
+
+            @messages_A = Message.where(user_id: @user.id)
+            if @messages_A.present?
+              @messages_A.each do |mes|
+                mes.update(user_name: @sub_user.name)
+              end
+            end
+            
+            @messages_B = Message.where(create_id: @user.id)
+            if @messages_B.present?
+                @messages_B.each do |mes|
+                mes.update(create_name: @sub_user.name)
+              end
+            end
+
+            @comments = Comment.where(user_id: @user.id)
+            if @comments.present?
+              @comments.each do |comment|
+                comment.update(user_name: @sub_user.name)
+              end
+            end
+
               redirect_to mypage_users_path
               flash[:notice] = 'アカウントを更新しました'
           else
