@@ -153,9 +153,17 @@ class BooksController < ApplicationController
 
       bookA = Book.first.id
       @sub_book.book_id = bookA
-      bookB = Book.where(name: @book.name)
       err_count = 0
 
+      if @book.valid?
+            err_count += 1
+      end
+
+      if err_count > 0
+        @book.errors.add(:images, "はjpg,jpegのみ登録できます")
+      end
+
+      bookB = Book.where(name: @book.name)
       if bookB.present?
         case @c_job.authority_id 
         when 2 then #書店
