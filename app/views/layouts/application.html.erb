@@ -18,7 +18,12 @@
   <% case @c_job.authority_id %>
     <% when 1 then %>
 
-  <li class="has-child"><%= link_to "在庫を探す", books_path %></li>
+  <li class="has-child"><a>本を探す</a>
+    <ul>
+      <li class="has-child"><%= link_to "所蔵図書から", stock_messages_path %></li>
+      <li class="has-child"><%= link_to "登録書籍から", books_path %></li>
+    </ul>
+  </li>
   <li class="has-child"><a>受発注管理</a>
     <ul>
     <li class="has-child"><%= link_to "受発注状況", orders_path %></li>
@@ -26,7 +31,13 @@
     <li class="has-child"><%= link_to "受発注データ作成", search_orders_path %></li>
     </ul>
   </li>
-  <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
+  <li class="has-child"><a>メッセージ</a>
+    <ul>
+    <li class="has-child"><%= link_to "受信一覧", messages_path %></li>
+    <li class="has-child"><%= link_to "送信一覧", ship_messages_path %></li>
+    <li class="has-child"><%= link_to "メッセージ作成", new_message_path %></li>
+    </ul>
+  </li>
   <li class="has-child"><a>アカウント</a>
     <ul>
     <li class="has-child"><%= link_to "マイページ", mypage_users_path %></li>
@@ -40,7 +51,7 @@
 
   <li class="has-child"><a>書籍一覧</a>
     <ul>
-    <li class="has-child"><%= link_to "在庫を探す", books_path %></li>
+    <li class="has-child"><%= link_to "本を探す", books_path %></li>
     <li class="has-child"><%= link_to "書籍登録", new_book_path %></li>
     </ul>
   <li class="has-child"><a>受発注管理</a>
@@ -49,10 +60,17 @@
     <li class="has-child"><%= link_to "受発注履歴", history_orders_path %></li>
     </ul>
   </li>
-  <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
+  <li class="has-child"><a>メッセージ</a>
+    <ul>
+    <li class="has-child"><%= link_to "受信一覧", messages_path %></li>
+    <li class="has-child"><%= link_to "送信一覧", ship_messages_path %></li>
+    <li class="has-child"><%= link_to "メッセージ作成", new_message_path %></li>
+    </ul>
+  </li>
   <li class="has-child"><a>アカウント</a>
     <ul>
     <li class="has-child"><%= link_to "マイページ", mypage_users_path %></li>
+    <li class="has-child"><%= link_to "発注者確認", users_path %></li>
     <li class="has-child"><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
     <li class="has-child"><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
     </ul>
@@ -64,7 +82,7 @@
 
   <li class="has-child"><a>書籍一覧</a>
     <ul>
-    <li class="has-child"><%= link_to "在庫を探す", books_path %></li>
+    <li class="has-child"><%= link_to "本を探す", books_path %></li>
     <li class="has-child"><%= link_to "書籍登録", new_book_path %></li>
     </ul>
   <li class="has-child"><a>受発注管理</a>
@@ -73,10 +91,17 @@
     <li class="has-child"><%= link_to "受発注履歴", history_orders_path %></li>
     </ul>
   </li>
-  <li class="has-child"><%= link_to "メッセージ", messages_path %></li>
+  <li class="has-child"><a>メッセージ</a>
+    <ul>
+    <li class="has-child"><%= link_to "受信一覧", messages_path %></li>
+    <li class="has-child"><%= link_to "送信一覧", ship_messages_path %></li>
+    <li class="has-child"><%= link_to "メッセージ作成", new_message_path %></li>
+    </ul>
+  </li>
   <li class="has-child"><a>アカウント</a>
     <ul>
     <li class="has-child"><%= link_to "マイページ", mypage_users_path %></li>
+    <li class="has-child"><%= link_to "発注者確認", users_path %></li>
     <li class="has-child"><%= link_to "アカウント編集", edit_user_path(@current_user.id) %></li>
     <li class="has-child"><%= link_to "ログアウト", session_path(@current_user.id), method: :delete %></li>
     </ul>

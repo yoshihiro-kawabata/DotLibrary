@@ -8,6 +8,7 @@ class Book < ApplicationRecord
     validates :keyword5, length: { maximum: 100 }
     has_and_belongs_to_many :stores
     has_and_belongs_to_many :providers
+    has_and_belongs_to_many :libraries
     has_many_attached :images
 
 

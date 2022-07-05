@@ -115,15 +115,22 @@ class BooksController < ApplicationController
     def show
       bookA = BooksStore.find_by(book_id:@book.id)
       bookB = BooksProvider.find_by(book_id:@book.id)
+      bookC = BooksLibrary.find_by(book_id:@book.id)
+
+      if bookC.present?
+        @user_flg = 1
+        @user = Library.find(bookC.library_id)
+        @sub_book = bookC
+      end
 
       if bookA.present?
-        @user_flg = true
+        @user_flg = 2
         @user = Store.find(bookA.store_id)
         @sub_book = bookA
       end
 
       if bookB.present?
-        @user_flg = false
+        @user_flg = 3
         @user = Provider.find(bookB.provider_id)
         @sub_book = bookB
       end
@@ -227,15 +234,22 @@ class BooksController < ApplicationController
     def edit
       bookA = BooksStore.find_by(book_id:@book.id)
       bookB = BooksProvider.find_by(book_id:@book.id)
+      bookC = BooksLibrary.find_by(book_id:@book.id)
+
+      if bookC.present?
+        @user_flg = 1
+        @user = Library.find(bookC.library_id)
+        @sub_book = bookC
+      end
 
       if bookA.present?
-        @user_flg = true
+        @user_flg = 2
         @user = Store.find(bookA.store_id)
         @sub_book = bookA
       end
 
       if bookB.present?
-        @user_flg = false
+        @user_flg = 3
         @user = Provider.find(bookB.provider_id)
         @sub_book = bookB
       end
@@ -244,9 +258,10 @@ class BooksController < ApplicationController
     def update
       bookA = BooksStore.find_by(book_id:@book.id)
       bookB = BooksProvider.find_by(book_id:@book.id)
+      bookC = BooksLibrary.find_by(book_id:@book.id)
 
       if bookA.present?
-        @user_flg = true
+        @user_flg = 2
         @user = Store.find(bookA.store_id)
         @sub_book = bookA
         @sub_book.quantity = params[:book][:quantity]
@@ -255,7 +270,7 @@ class BooksController < ApplicationController
       end
 
       if bookB.present?
-        @user_flg = false
+        @user_flg = 3
         @user = Provider.find(bookB.provider_id)
         @sub_book = bookB
         @sub_book.quantity = params[:book][:quantity]
@@ -264,6 +279,14 @@ class BooksController < ApplicationController
         else
           @sub_book.hand_flg = false
         end
+      end
+
+      if bookC.present?
+        @user_flg = 1
+        @user = Library.find(bookC.library_id)
+        @sub_book = bookC
+        @sub_book.quantity = params[:book][:quantity]
+        @sub_book.remark = params[:book][:remark]
       end
 
       @book.name = params[:book][:name]
@@ -291,19 +314,19 @@ class BooksController < ApplicationController
           @book.errors.add(:images, "：画像情報に問題があります（ファイルサイズ：5MBまで、ファイル形式：jpg,jpegのみ）")
         end
 
-        bookB = Book.where(name: @book.name).where.not(id: @book.id)
+        book1 = Book.where(name: @book.name).where.not(id: @book.id)
         err_count = 0
   
-        if bookB.present?
+        if book1.present?
           case @c_job.authority_id 
           when 2 then #書店
-            bookB.each do |book|
+            book1.each do |book|
               if  book.store_ids.count{ |x| x == @current_job.id } > 0
                 err_count += 1
               end
             end
           when 3 then #提供者
-            bookB.each do |book|
+            book1.each do |book|
               if book.provider_ids.count{ |x| x == @current_job.id } > 0
                 err_count += 1
               end
@@ -334,25 +357,28 @@ class BooksController < ApplicationController
               if @book.update(book_params)
 
                 case @c_job.authority_id
+                  when 1 then #司書
+                    @sub_book.update(library_params)
                   when 2 then #書店
                     @sub_book.update(store_params)
                   when 3 then #個人提供者
                     @sub_book.update(provider_params)
                 end
 
-                libraries = Library.all
-                libraries.each do |library|
-                  Message.create!(
-                    content: "書籍データを更新しました。\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
-                    create_name: @current_job.name,
-                    create_id: @current_user.id,
-                    user_name: library.name,
-                    user_id: library.user_id
-                  )  
+                unless @c_job.authority_id == 1
+                  libraries = Library.all
+                  libraries.each do |library|
+                    Message.create!(
+                      content: "書籍データを更新しました。\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
+                      create_name: @current_job.name,
+                      create_id: @current_user.id,
+                      user_name: library.name,
+                      user_id: library.user_id
+                    )  
+                  end
                 end
-      
-                  redirect_to book_path(@book.id)
-                  flash[:notice] = '書籍情報を更新しました'
+                redirect_to book_path(@book.id)
+                flash[:notice] = '書籍情報を更新しました'
               else
                 flash[:notice] = '書籍情報を更新出来ませんでした'
                 render :edit
@@ -374,6 +400,10 @@ class BooksController < ApplicationController
       def book_params
         params.require(:book).permit(:name, :number, :keyword1, :keyword2, :keyword3, :keyword4, :keyword5, images:[])
       end        
+
+      def library_params
+        params.require(:book).permit(:quantity, :remark)
+      end
 
       def store_params
         params.require(:book).permit(:quantity, :price, :limit)
@@ -405,6 +435,4 @@ class BooksController < ApplicationController
       def set_q
         @q = Book.ransack(params[:q])
       end
-
-
 end

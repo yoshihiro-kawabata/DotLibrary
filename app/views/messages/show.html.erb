@@ -11,11 +11,17 @@
 <% end %>
 
 <div class="d-flex flex-wrap">
-    <div class="col-sm-12 col-lg-6">
-        <h4 style="margin-top: 15px;"><%= link_to '削除', @message, method: :delete, data: { confirm: "メッセージを削除します。" } %></h4>
-    </div>
-    <div class="col-sm-12 col-lg-6">
-        <h4 style="margin-top: 15px;"><%= link_to t('common.back'), messages_path %></h4>
-    </div>
+    <% unless @message.create_id == @current_user.id %>
+        <div class="col-sm-12 col-lg-6">
+            <h4 style="margin-top: 15px;"><%= link_to '削除', @message, method: :delete, data: { confirm: "メッセージを削除します。" } %></h4>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <h4 style="margin-top: 15px;"><%= link_to t('common.back'), messages_path %></h4>
+        </div>
+    <% else %>
+        <div class="col-sm-12 col-lg-6">
+            <h4 style="margin-top: 15px;"><%= link_to t('common.back'), ship_messages_path %></h4>
+        </div>
+    <% end %>
 </div>
 </div>

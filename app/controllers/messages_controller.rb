@@ -1,9 +1,10 @@
 class MessagesController < ApplicationController
     before_action :set_message, only: [:show, :destroy]
+    before_action :set_q, only: [:stock, :search]
     before_action :login_required
     skip_before_action :library_required
-    skip_before_action :store_required
-    skip_before_action :provider_required
+    before_action :store_required, only: [:stock, :search]
+    before_action :provider_required, only: [:stock, :search]
 
 
     def index
@@ -46,9 +47,17 @@ class MessagesController < ApplicationController
     end
 
     def show
+      unless @message.user_id == @current_user.id or @message.create_id == @current_user.id 
+        redirect_to messages_path, notice: 'そのメッセージにはアクセスできません。'
+      end  
+
       if @message.user_id == @current_user.id
           @message.update(read_flg: true)
       end
+    end
+
+    def ship
+      @messages = Message.select(:id,:user_name,:content,:read_flg).where(create_id:@current_user.id).order("created_at DESC").page params[:page]        
     end
 
     def destroy
@@ -65,6 +74,58 @@ class MessagesController < ApplicationController
       @messages = Message.where(id: params[:mes]).update_all(read_flg: true)
       redirect_to messages_path, notice: 'すべて既読にしました'
     end  
+
+    def stock
+      @books =[]
+      @sen = @q.result.order("name ASC")
+        @sen.each do |book|
+          allib = []
+          case @c_job.authority_id 
+            when 1 then #司書
+              alBolib = BooksLibrary.find_by(book_id:book.id, library_id:@current_job.id)
+            else 
+              alBolib = nil
+          end
+          if alBolib.present?
+            allib << book.name
+            allib << book.keyword1
+            allib << book.keyword2
+            allib << book.keyword3
+            allib << book.keyword4
+            allib << book.keyword5
+            allib << alBolib.quantity
+            allib << alBolib.remark
+            allib << book.id
+            @books << allib
+          end    
+        end
+      end
+      
+    def search
+      @books =[]
+      @sen = @q.result.order("name ASC")
+        @sen.each do |book|
+          allib = []
+          case @c_job.authority_id 
+            when 1 then #司書
+              alBolib = BooksLibrary.find_by(book_id:book.id, library_id:@current_job.id)
+            else 
+              alBolib = nil
+          end
+          if alBolib.present?
+            allib << book.name
+            allib << book.keyword1
+            allib << book.keyword2
+            allib << book.keyword3
+            allib << book.keyword4
+            allib << book.keyword5
+            allib << alBolib.quantity
+            allib << alBolib.remark
+            allib << book.id
+            @books << allib
+          end    
+        end
+      end
 
     private  
       def message_params
@@ -98,5 +159,10 @@ class MessagesController < ApplicationController
           @sub_users << sub_box
         end
       end
+
+      def set_q
+        @q = Book.ransack(params[:q])
+      end
+
 
 end

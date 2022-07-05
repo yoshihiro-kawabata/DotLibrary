@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     collection do
       get 'alldel'
       get 'allshow'
+      get 'ship'
+      get 'stock'
+      get 'search'
     end
   end
 

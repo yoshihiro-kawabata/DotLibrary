@@ -1,0 +1,51 @@
+<h2 style="margin: 20px;">所蔵図書一覧</h2>
+<div class="book_box">
+<%= search_form_for @q, url: search_messages_path do |f| %>
+  <div class="d-flex flex-wrap">
+    <div class="col-sm-12 col-lg-1">
+    </div>
+    <div class="col-sm-12 col-lg-2">
+      <%= f.label :keyword, '名前・キーワード' %>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+      <%= f.search_field :name_or_keyword1_or_keyword2_or_keyword3_or_keyword4_or_keyword5_cont,
+                    include_blank: true,
+                    class: 'form-control'%>
+    </div>
+    <div class="col-sm-12 col-lg-3">
+      <%= f.submit '検索', class: "btn btn-primary"  %>
+    </div>
+  </div>
+  <% end %>
+<br>
+
+<% unless @books[0].present? %>
+  <h2 style="margin: 20px;">表示できる書籍はありません。</h2>
+<% else %>
+
+<div class="example">
+<table style="width:1000px; border:3px solid">
+  <thead>
+    <tr>
+      <th style="width:200px;">書籍名</th>
+      <th style="width:400px;">キーワード</th>
+      <th style="width:70px;">在庫数</th>
+      <th style="width:80px;">状況設定</th>
+      <th style="width:50px;">確認</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @books.size.times do |n| %>
+      <tr>
+        <td style="border:2px solid"><%= @books[n][0] %></td>
+        <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 500px; "><%= @books[n][1] %>　<%= @books[n][2] %>　<%= @books[n][3] %>　<%= @books[n][4] %>　<%= @books[n][5] %></td>
+        <td style="border:2px solid"><% if @books[n][6] == 0 %>在庫なし<% else %><%= @books[n][6] %><% end %></td>
+        <td style="border:2px solid"><%= @books[n][7] %></td>
+        <td style="border:2px solid"><%= link_to '確認', book_path(@books[n][8]) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<% end %>
+</div>

@@ -1,35 +1,56 @@
 class UsersController < ApplicationController
     before_action :login_required
     skip_before_action :library_required
-    before_action :store_required,  only: [:index, :new, :create]
-    before_action :provider_required,  only: [:index, :new, :create]
+    before_action :store_required,  only: [:new, :create]
+    before_action :provider_required,  only: [:new, :create]
     before_action :set_user,  only: [:show, :edit, :update, :destroy]
     before_action :set_sub_user,  only: [:show, :edit, :update]
     before_action :correct_user, only: [:edit, :update]
   
       def index
-        @users = User.all.order("id ASC")
-
-        @sub_users = []
-        @users.each do |user|
-          sub_box = []
-          use_auth = UsersAuthority.find_by(user_id: user.id)
-          if use_auth.present?
-            case use_auth.authority_id 
-                when 1 then #司書
-                  sub_user = Library.find_by(user_id: user.id)
-                when 2 then #書店
-                  sub_user = Store.find_by(user_id: user.id)
-                when 3 then #個人提供者
-                  sub_user = Provider.find_by(user_id: user.id)
+        case @c_job.authority_id 
+        when 1 then
+          @users = User.all.order("id ASC")
+          @sub_users = []
+          @users.each do |user|
+            sub_box = []
+            use_auth = UsersAuthority.find_by(user_id: user.id)
+            if use_auth.present?
+              case use_auth.authority_id 
+                  when 1 then #司書
+                    sub_user = Library.find_by(user_id: user.id)
+                  when 2 then #書店
+                    sub_user = Store.find_by(user_id: user.id)
+                  when 3 then #個人提供者
+                    sub_user = Provider.find_by(user_id: user.id)
+              end
             end
-          else
-            sub_user = Store.new
-          end  
-          sub_box << sub_user.name
-          sub_box << sub_user.address
-          sub_box << user.id
-          @sub_users << sub_box
+            if sub_user.present?
+              sub_box << sub_user.name
+              sub_box << sub_user.address
+              sub_box << user.id
+              @sub_users << sub_box
+            end  
+          end
+        else
+          @users = User.all.order("id ASC")
+          @sub_users = []
+          @users.each do |user|
+            sub_box = []
+            use_auth = UsersAuthority.find_by(user_id: user.id)
+            if use_auth.present?
+              case use_auth.authority_id 
+                  when 1 then #司書
+                    sub_user = Library.find_by(user_id: user.id)
+              end
+            end
+            if sub_user.present?
+              sub_box << sub_user.name
+              sub_box << sub_user.address
+              sub_box << user.id
+              @sub_users << sub_box
+            end  
+          end
         end
       end
 
@@ -131,6 +152,10 @@ class UsersController < ApplicationController
       end
 
       def show
+        if @c_job.authority_id != 1 && @use_auth.authority_id != 1
+          redirect_to users_path
+          flash[:notice] = 'アカウント一覧に戻ります'    
+        end
       end
   
       def edit

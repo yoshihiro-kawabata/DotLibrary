@@ -236,7 +236,42 @@ book = Book.create!(
     )
   end
 
-#master_order
+  4.times do |n|
+    book = Book.create!(      
+      name: "test#{n + 4}",
+      number: n + 12,
+      keyword1:"キーワード#{n + 4}"
+     )
+     book.images.attach(io: File.open(Rails.root.join("app/assets/images/test#{n + 4}.jpg")),
+     filename: "test#{n + 4}.jpg")
+    
+    BooksLibrary.create!(
+      library_id: n + 2, 
+      book_id: n + 12, 
+      quantity:n + 3,
+      remark: "譲渡可能"
+    )
+    end
+
+  4.times do |n|
+    book = Book.create!(      
+      name: "test#{n + 2}",
+      number: n + 16,
+      keyword1:"著者#{n + 1}",
+      keyword2:"出版社#{n + 5}"
+     )
+    book.images.attach(io: File.open(Rails.root.join("app/assets/images/test#{n + 2}.jpg")),
+    filename: "test#{n + 2}.jpg")
+      
+    BooksLibrary.create!(
+      library_id: 1, 
+      book_id: n + 16, 
+      quantity:n + 3,
+      remark: "貸出可能"
+    )
+    end
+  
+  #master_order
 Order.create!(
   id: 0,
   title: "masterorder",
@@ -327,10 +362,12 @@ Order.create!(
     number: n + 21,
     keyword1:"キーワード#{n + 21}"
    )
-  
+   book.images.attach(io: File.open(Rails.root.join("app/assets/images/test#{n + 1}.jpg")),
+   filename: "test#{n + 1}.jpg")
+
   BooksStore.create!(
     store_id: 1, 
-    book_id: n + 12, 
+    book_id: n + 20, 
     quantity:9999999,
     price: 9999999,
     limit: "2023年#{n + 1}月予定"

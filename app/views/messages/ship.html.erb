@@ -1,0 +1,42 @@
+<div style="width: 90%; display: flex; margin:auto; text-align: center; background-color: #fef4f4;">
+  <div class="col-sm-12 col-lg-3">
+      <h4 style="margin: 20px;">送信一覧</h4>
+  </div>
+  <div class="col-sm-12 col-lg-3">
+    <h4 style="margin: 20px;"><%= link_to "メッセージ", new_message_path %></h4>
+  </div>
+</div>
+<% unless @messages.present? %>
+<h2 style="margin: 20px;">送信メッセージはありません。</h2>
+<% else %>
+<table style="width:90%; border:3px solid; margin:auto; text-align: center;">
+    <thead>
+      <tr>
+        <th style="width:30%;">名前</th>
+        <th style="width:50%;">内容</th>
+        <th style="width:10%;">受信者</th>
+        <th style="width:10%;">確認</th>
+
+      </tr>
+    </thead>
+  
+    <tbody>
+      <% @messages.each do |message| %>
+        <tr>
+          <td style="border:2px solid"><%= message.user_name %>さんへのメッセージ</td>
+          <td style="border:2px solid; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width: 600px; "><%= html_newline(message.content) %></td>
+          <td style="border:2px solid">
+          <% if message.read_flg? %>
+            <font color=blue>既読</font>
+          <% else %>
+            <font color=red>未読</font>
+          <% end %>
+          </td>
+          <td style="border:2px solid"><%= link_to '確認', message_path(message.id) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @messages %>
+
+  <% end %>

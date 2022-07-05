@@ -265,9 +265,102 @@ class OrdersController < ApplicationController
               render :edit    
             end
           end
+        when 6 then
+          details = Detail.where(order_id: order_up.id).where.not(quantity: 0)
+          details.each do |detail|
+            if detail.price > 0
+              bookD = nil
+              bookS = nil
+              storeB = Store.find_by(user_id: order_up.receive_user_id)
+              selbooks = Book.where(name: detail.name)
+              selbooks.each do |selbook|
+                bookD = BooksStore.find_by(book_id: selbook.id, store_id: storeB.id)
+                if bookD.present?
+                  bookS = selbook
+                  break
+                end
+              end
+
+              if bookD.present?
+                book = Book.create!(      
+                name: detail.name,
+                number: detail.id,
+                keyword1: "納品元：" + order_up.receive_user_name,
+                keyword2: "納品日：" + DateTime.now.strftime('%Y年%m月%d日%H時%M分'),
+                keyword3: "備考：" + detail.remark
+                )
+                bookS.images.each do |image|
+                  book.images.attach(image.blob)
+                end
+              else
+                book = Book.create!(      
+                  name: detail.name,
+                  number: detail.id,
+                  keyword1: "納品元：" + order_up.receive_user_name,
+                  keyword2: "納品日：" + DateTime.now.strftime('%Y年%m月%d日%H時%M分'),
+                  keyword3: "備考：" + detail.remark
+                )
+              end
+
+              BooksLibrary.create!(
+                library_id: @current_job.id, 
+                book_id: book.id, 
+                quantity: detail.quantity,
+                remark: '貸出可能'
+              )
+            else
+              bookD = nil
+              bookS = nil
+              providerB = Provider.find_by(user_id: order_up.receive_user_id)
+              selbooks = Book.where(name: detail.name)
+              selbooks.each do |selbook|
+                bookD = BooksProvider.find_by(book_id: selbook.id, provider_id: providerB.id)
+                if bookD.present?
+                  bookS = selbook
+                  break
+                end
+              end
+
+              if bookD.present?
+                book = Book.create!(      
+                name: detail.name,
+                number: detail.id,
+                keyword1: "納品元：" + order_up.receive_user_name,
+                keyword2: "納品日：" + DateTime.now.strftime('%Y年%m月%d日%H時%M分'),
+                keyword3: "備考：" + detail.remark
+            )
+              bookS.images.each do |image|
+                book.images.attach(image.blob)
+              end
+            else
+              book = Book.create!(      
+                name: detail.name,
+                number: detail.id,
+                keyword1: "納品元：" + order_up.receive_user_name,
+                keyword2: "納品日：" + DateTime.now.strftime('%Y年%m月%d日%H時%M分'),
+                keyword3: "備考：" + detail.remark
+            )              
+            end
+              BooksLibrary.create!(
+                library_id: @current_job.id, 
+                book_id: book.id, 
+                quantity: detail.quantity,
+                remark: detail.remark
+              )
+            end
+          end
+          order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
+          if @order.update(title: order_up.title, number: order_up.number)
+            comment_create(params[:order][:number])
+            flash[:notice] = '受発注情報の更新が完了しました'
+            redirect_to talk_orders_path(order_id: @order.id)
+          else
+            flash[:notice] = '受発注情報が更新できませんでした'
+            render :edit    
+          end
+
         when 13 then 
           order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
-          order_up.price = @order.price + params[:order][:postage].to_i + params[:order][:equipment].to_i + params[:order][:other].to_i
           order_up.complete_flg = true
           if @order.update(title: order_up.title, number: order_up.number, complete_flg: order_up.complete_flg)
             comment_create(params[:order][:number])
@@ -277,6 +370,91 @@ class OrdersController < ApplicationController
             flash[:notice] = '受発注情報が更新できませんでした'
             render :edit    
           end
+        
+        when 14 then 
+          details = Detail.where(order_id: order_up.id).where.not(quantity: 0)
+          details.each do |detail|
+            if detail.price > 0
+              bookD = nil
+              storeB = Store.find_by(user_id: order_up.receive_user_id)
+              selbooks = Book.where(name: detail.name)
+              selbooks.each do |selbook|
+                bookD = BooksStore.find_by(book_id: selbook.id, store_id: storeB.id)
+                if bookD.present?
+                  qubo = bookD.quantity + detail.quantity
+                  bookD.update(quantity: qubo)
+                  break
+                end
+              end
+            else
+              bookD = nil
+              providerB = Provider.find_by(user_id: order_up.receive_user_id)
+              selbooks = Book.where(name: detail.name)
+              selbooks.each do |selbook|
+                bookD = BooksProvider.find_by(book_id: selbook.id, provider_id: providerB.id)
+                if bookD.present?
+                  qubo = bookD.quantity + detail.quantity
+                  bookD.update(quantity: qubo)
+                  break
+                end
+              end
+            end
+          end
+
+          order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
+          order_up.complete_flg = true
+          order_up.number = 13
+          if @order.update(title: order_up.title, number: order_up.number, complete_flg: order_up.complete_flg)
+            comment_create(params[:order][:number])
+            flash[:notice] = '受発注が完了しました'
+            redirect_to orders_path
+          else
+            flash[:notice] = '受発注情報が更新できませんでした'
+            render :edit    
+          end
+  
+        when 15 then 
+          details = Detail.where(order_id: order_up.id).where.not(quantity: 0)
+          details.each do |detail|
+            if detail.price > 0
+              bookD = nil
+              storeB = Store.find_by(user_id: order_up.receive_user_id)
+              selbooks = Book.where(name: detail.name)
+              selbooks.each do |selbook|
+                bookD = BooksStore.find_by(book_id: selbook.id, store_id: storeB.id)
+                if bookD.present?
+                  qubo = bookD.quantity + detail.quantity
+                  bookD.update(quantity: qubo)
+                  break
+                end
+              end
+  
+            else
+              bookD = nil
+              providerB = Provider.find_by(user_id: order_up.receive_user_id)
+              selbooks = Book.where(name: detail.name)
+              selbooks.each do |selbook|
+                bookD = BooksProvider.find_by(book_id: selbook.id, provider_id: providerB.id)
+                if bookD.present?
+                  qubo = bookD.quantity + detail.quantity
+                  bookD.update(quantity: qubo)  
+                  break
+                end
+              end
+            end
+          end
+
+          order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
+          order_up.number = 4
+          if @order.update(title: order_up.title, number: order_up.number)
+            comment_create(params[:order][:number])
+            flash[:notice] = '受発注情報の更新が完了しました'
+            redirect_to orders_path
+          else
+            flash[:notice] = '受発注情報が更新できませんでした'
+            render :edit    
+          end
+  
         else
           order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
           if @order.update(title: order_up.title, number: order_up.number)
@@ -636,6 +814,10 @@ class OrdersController < ApplicationController
           order.receive_user_name = "領収完了"
         when 13 then 
           order.receive_user_name = "完了"
+        when 14 then 
+          order.receive_user_name = "未納終了"
+        when 15 then 
+          order.receive_user_name = "未納差し戻し"
         end
       end
 
@@ -653,7 +835,7 @@ class OrdersController < ApplicationController
         when 5 then 
             @number = ["発注完了", "取引終了"]
         when 6 then 
-            @number = ["納品完了", "取引終了"]
+            @number = ["納品完了", "未納終了", "未納差し戻し"]
         when 7 then 
             @number = ["受領申請","請求申請","領収申請", "取引終了"]
         when 8 then 
@@ -703,6 +885,10 @@ class OrdersController < ApplicationController
           order_up.number = 13
         when "取引終了" then 
           order_up.number = 13
+        when "未納終了" then 
+          order_up.number = 14
+        when "未納差し戻し" then 
+          order_up.number = 15
         end
       end
 

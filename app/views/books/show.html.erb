@@ -11,6 +11,12 @@
           <%= @book.name %>
         </div>
         <div class="col-sm-12 col-lg-4">
+            書籍番号：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @book.number %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
             キーワード：
         </div>
         <div class="col-sm-12 col-lg-8">
@@ -43,7 +49,21 @@
           <%= @user.name %>
         </div>
 
-      <% if @user_flg == true %>
+    <% case @user_flg when 1 then %>
+        <div class="col-sm-12 col-lg-4">
+            在庫数：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <% if @sub_book.quantity == 0 %>在庫なし<% else %><%= @sub_book.quantity %><% end %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            概要：
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= @sub_book.remark %>
+        </div>
+
+      <% when 2 then %>
         <div class="col-sm-12 col-lg-4">
             在庫数：
         </div>
@@ -83,10 +103,10 @@
         <% end %>
       <% end %>
       <div class="col-sm-12 col-lg-4">
-        <h4><% unless @c_job.authority_id == 1 %><%= link_to t('common.edit'), edit_book_path(@book.id) %><% end %></h4>
+        <h4><% if @c_job.authority_id == @user_flg %><%= link_to t('common.edit'), edit_book_path(@book.id) %><% end %></h4>
       </div>
       <div class="col-sm-12 col-lg-8">
-        <h4><%= link_to t('common.back'), books_path %></h4>
+        <h4><% if @c_job.authority_id == 1 && @user_flg != 1 %><%= link_to t('common.back'), books_path %><% else %><%= link_to t('common.back'), stock_messages_path %><% end %></h4>
       </div>
     </div>
     </div>

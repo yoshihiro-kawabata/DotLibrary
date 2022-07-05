@@ -62,7 +62,20 @@
       <div class="col-sm-12 col-lg-8">
         <%= f.text_field :keyword5, :size => 32, :maxlength => 30, :placeholder => "キーワードその5" %>
       </div>
-      <% case @c_job.authority_id when 2 then %>
+      <% case @c_job.authority_id when 1 then %>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :在庫数： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.text_field :quantity, :size => 32, :maxlength => 7,:value => @sub_book.quantity, :placeholder => "在庫数" %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <%= f.label :概要： %>
+        </div>
+        <div class="col-sm-12 col-lg-8">
+          <%= f.text_field :remark, :size => 32, :maxlength => 30,:value => @sub_book.remark, :placeholder => "概要" %>
+        </div>
+      <% when 2 then %>
         <div class="col-sm-12 col-lg-4">
           <%= f.label :在庫数： %>
         </div>
