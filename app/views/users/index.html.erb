@@ -1,4 +1,9 @@
-<h2 style="margin: 20px;">アカウント一覧</h2>
+<% if @c_job.authority_id == 1 %>
+  <h2 style="margin: 20px;">アカウント一覧</h2>
+<% else %>
+  <h2 style="margin: 20px;">発注先一覧</h2>
+<% end %>
+
 <div class="example">
 <table style="width:1000px; border:3px solid">
   <thead>

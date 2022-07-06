@@ -102,10 +102,20 @@
             </div>
         <% end %>
       <% end %>
-      <div class="col-sm-12 col-lg-4">
-        <h4><% if @c_job.authority_id == @user_flg %><%= link_to t('common.edit'), edit_book_path(@book.id) %><% end %></h4>
+      <div class="col-sm-12 col-lg-12">
+        <br>　　　
       </div>
+      <br>
+      <% if @c_job.authority_id == @user_flg %>
+      <div class="col-sm-12 col-lg-4">
+        <h4><%= link_to t('common.edit'), edit_book_path(@book.id) %></h4>
+      </div>
+      <% end %>
       <div class="col-sm-12 col-lg-8">
+        <h4><% if @c_job.authority_id == 1 && @user_flg != 1 %><%= link_to '受発注データ作成', choice_orders_path(user_id: @user.user_id) %><% end %></h4>
+      </div>
+      <br>
+      <div class="col-sm-12 col-lg-12">
         <h4><% if @c_job.authority_id == 1 && @user_flg != 1 %><%= link_to t('common.back'), books_path %><% else %><%= link_to t('common.back'), stock_messages_path %><% end %></h4>
       </div>
     </div>

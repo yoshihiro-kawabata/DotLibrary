@@ -25,6 +25,7 @@
         <%= @sub_user.name %>
     </div>
 
+<% if @c_job.authority_id == 1 %>
     <div class="col-sm-12 col-lg-4">
         利用者ID：
     </div>
@@ -45,6 +46,7 @@
     <div class="col-sm-12 col-lg-8">
         <%= @sub_user.sub_number %>
     </div>
+<% end %>
 
     <div class="col-sm-12 col-lg-4">
         電話番号：
