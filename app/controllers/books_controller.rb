@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
     before_action :login_required
-    before_action :library_required, only: [:new, :create]
+    skip_before_action :library_required
     skip_before_action :store_required
     skip_before_action :provider_required
     before_action :set_book, only: [:show, :edit, :update]
@@ -145,6 +145,9 @@ class BooksController < ApplicationController
       @book = Book.new(book_params)
 
       case @c_job.authority_id 
+        when 1 then #司書
+          @sub_book = BooksLibrary.new(library_params)
+          @sub_book.library_id = @current_job.id
         when 2 then #書店
           @sub_book = BooksStore.new(store_params)
           @sub_book.store_id = @current_job.id
@@ -211,19 +214,25 @@ class BooksController < ApplicationController
           @sub_book.book_id = @book.id
           @sub_book.save
 
-          libraries = Library.all
-          libraries.each do |library|
-            Message.create!(
-              content: "書籍を追加しました！\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
-              create_name: @current_job.name,
-              create_id: @current_user.id,
-              user_name: library.name,
-              user_id: library.user_id
-            )  
+          unless @c_job.authority_id  == 1
+            libraries = Library.all
+            libraries.each do |library|
+              Message.create!(
+                content: "書籍を追加しました！\n書籍名：" + @book.name + "\n在庫数：" + @sub_book.quantity.to_s,
+                create_name: @current_job.name,
+                create_id: @current_user.id,
+                user_name: library.name,
+                user_id: library.user_id
+              )  
+            end
+            redirect_to books_path
+            flash[:notice] = '書籍を登録しました'
+
+          else
+            redirect_to stock_messages_path
+            flash[:notice] = '書籍を登録しました'
           end
-        
-          redirect_to books_path
-          flash[:notice] = '書籍を登録しました'
+          
         else
           flash[:notice] = '書籍を登録出来ませんでした'
           render :new

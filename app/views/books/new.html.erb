@@ -61,7 +61,22 @@
         <%= f.text_field :keyword5, :size => 32, :maxlength => 30, :placeholder => "キーワードその5" %>
     </div>
 
-    <% case @c_job.authority_id when 2 then %>
+    <% case @c_job.authority_id when 1 then %>
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :在庫数： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :quantity, :size => 32, :maxlength => 7, :placeholder => "在庫数" %>
+    </div>
+
+    <div class="col-sm-12 col-lg-4">
+        <%= f.label :備考： %>
+    </div>
+    <div class="col-sm-12 col-lg-8">
+        <%= f.text_field :remark, :size => 32, :maxlength => 30, :placeholder => "例：貸借可能、譲渡可能" %>
+    </div>
+
+    <% when 2 then %>
     <div class="col-sm-12 col-lg-4">
         <%= f.label :在庫数： %>
     </div>

@@ -18,14 +18,14 @@ Authority.create!(
     
 #master_user
 User.create!(
-    number: "9999",
+    number: "9000",
     password: "master",
     password_confirmation: "master"
      )
 
 Library.create!(
       name: "master図書館",
-      sub_number: "9999",
+      sub_number: "9000",
       email: "master_libra@master.com",
       phone: "999-9999-999",
       address: "東京都東京区東京1-1-1",
@@ -36,14 +36,14 @@ authorityA = Authority.find(1)
 UsersAuthority.create!(user_id:1, authority_id:authorityA.id)
 
 User.create!(
-  number: "8888",
+  number: "8000",
   password: "master",
   password_confirmation: "master"
    )
 
 Store.create!(
     name: "master書店",
-    sub_number: "8888",
+    sub_number: "8000",
     phone: "000-0000-000",
     fax: "0000-0000-00",
     manager: "たにた",
@@ -66,14 +66,14 @@ UsersAuthority.create!(user_id:2, authority_id:authorityA.id)
 end
 
 User.create!(
-  number: "7777",
+  number: "7000",
   password: "master",
   password_confirmation: "master"
    )
 
 Provider.create!(
     name: "master提供者",
-    sub_number: "7777",
+    sub_number: "7000",
     email: "master_provider@master.com",
     phone: "777-7777-777",
     address: "京都府京都区京1-1-1",
@@ -353,7 +353,6 @@ Order.create!(
       remark: "テストデータ#{n}",
       order_id: "#{n + 1}"
     )
-
   end
 
 10.times do |n|

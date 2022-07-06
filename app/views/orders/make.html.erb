@@ -79,14 +79,14 @@
                 <% when 3 then %>
                   <% if @books[n][3] == true %> 
               <td style="border:2px solid">
-                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :maxlength => 30, :placeholder => "例：譲渡希望、貸借希望" %>
+                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :maxlength => 30, :placeholder => "例：譲渡可能、貸借可能" %>
               </td>
               <td style="border:2px solid">
                       譲渡可能
               </td>
                   <% else %>
               <td style="border:2px solid">
-                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :maxlength => 30, :placeholder => "例：貸借希望" %>
+                      <%= f.text_field :remarks, :name => "order[remarks][]" ,:size => 20, :maxlength => 30, :placeholder => "例：貸借可能" %>
               </td>
               <td style="border:2px solid">
                       貸借のみ

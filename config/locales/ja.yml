@@ -23,6 +23,10 @@ ja:
         images: 画像
         add_images: 追加する画像
         del_images: 削除する画像
+      books_library: 
+        title: タイトル
+        quantity: 在庫数
+        book: 書籍
       books_provider: 
         title: タイトル
         quantity: 在庫数

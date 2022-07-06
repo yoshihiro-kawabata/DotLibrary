@@ -403,7 +403,7 @@ class OrdersController < ApplicationController
 
           order_up.title = "【" + params[:order][:number] + "】" + @current_job.name + "_" + DateTime.now.strftime('%Y年%m月%d日%H時%M分')
           order_up.complete_flg = true
-          order_up.number = 13
+          order_up.number = 14
           if @order.update(title: order_up.title, number: order_up.number, complete_flg: order_up.complete_flg)
             comment_create(params[:order][:number])
             flash[:notice] = '受発注が完了しました'
